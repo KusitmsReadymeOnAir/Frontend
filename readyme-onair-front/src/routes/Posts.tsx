@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Daily from './Categories/Daily';
 import Design from './Categories/Design';
 import Develop from './Categories/Develop';
@@ -11,7 +11,7 @@ import Upload from './Upload';
 const Posts = () => {
   return (
     <div>
-      <Switch>
+      <Routes>
         <Route path={`/design`}>
           <Design />
         </Route>
@@ -30,7 +30,7 @@ const Posts = () => {
         <Route path={`/upload`}>
           <Upload />
         </Route>
-      </Switch>
+      </Routes>
     </div>
   );
 };
