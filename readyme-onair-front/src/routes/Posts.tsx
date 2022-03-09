@@ -1,38 +1,10 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Daily from './Categories/Daily';
-import Design from './Categories/Design';
-import Develop from './Categories/Develop';
-import PD from './Categories/PD';
-import TeamBuild from './Categories/TeamBuild';
-import Upload from './Upload';
-
 // 게시글 리스트 페이지
+import { useEffect } from 'react';
+const DB_URL =
+  'https://www.notion.so/standing1011/c2536186802946fbbf13aa2225132139#62e5e01c20ac4abf8a63dbe60f752036';
+
 const Posts = () => {
-  return (
-    <div>
-      <Routes>
-        <Route path={`/design`}>
-          <Design />
-        </Route>
-        <Route path={`/develop`}>
-          <Develop />
-        </Route>
-        <Route path={`/pd`}>
-          <PD />
-        </Route>
-        <Route path={`/teambuild`}>
-          <TeamBuild />
-        </Route>
-        <Route path={`/daily`}>
-          <Daily />
-        </Route>
-        <Route path={`/upload`}>
-          <Upload />
-        </Route>
-      </Routes>
-    </div>
-  );
+  return <div>Posts</div>;
 };
 
 export default Posts;
