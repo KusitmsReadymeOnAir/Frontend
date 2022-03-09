@@ -68,6 +68,26 @@ const ToolContainer = styled.div`
 const ContentContainer = styled.div`
   height: 50vh;
 `;
+
+const SubmitContainer = styled.div`
+  display: flex;
+  justify-content: right;
+  align-items: center;
+`;
+
+const SubmitBtn = styled.button`
+  position: relative;
+  width: 120px;
+  height: 43px;
+  background: #2152f4;
+  border-radius: 25px;
+  border-style: none;
+  border-color: #fff;
+  color: #fff;
+  font-style: normal;
+  font-size: 20px;
+  cursor: pointer;
+`;
 const Write = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('design');
@@ -75,22 +95,18 @@ const Write = () => {
   const [pw, setPw] = useState('');
   const [content, setContent] = useState('');
   const [imageId, setImgeId] = useState('첨부파일');
+  const [isSubmit, setSubmit] = useState(false);
 
   const postData = { title, content, category, writer, pw, imageId };
-  // useEffect(() => {
-  //   (async () => {
-  //     const posts = await (
-  //       await fetch(DB_URL, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(postData),
-  //       })
-  //     ).json();
-  //     console.log(postData);
-  //   })();
-  // }, []);
+  const onSubmit = () => {
+    fetch(DB_URL + '/board/write', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    });
+  };
 
   const onChangeTitle = (value: string) => {
     setTitle(value);
@@ -213,6 +229,9 @@ const Write = () => {
           }}
         />
       </ContentContainer>
+      <SubmitContainer>
+        <SubmitBtn onSubmit={onSubmit}>업로드</SubmitBtn>
+      </SubmitContainer>
     </Container>
   );
 };
