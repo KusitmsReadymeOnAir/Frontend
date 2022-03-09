@@ -7,11 +7,12 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/:categoryId">
-          <Posts />
+        <Route path="/:categoryId" element={ <Posts />}>
         </Route>
-        <Route path="/">
-          <Posts />
+        <Route path="/" element={ <Posts />}>
+        </Route>
+        <Route path="/post">
+              <Route path=":id" element={<Post/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
