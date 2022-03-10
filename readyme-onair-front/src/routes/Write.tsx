@@ -31,7 +31,7 @@ const options = [
 
 const Container = styled.div`
   padding: 0px 20px;
-  max-width: 780px; ;
+  width: 90%;
 `;
 // 제목 입력 폼
 const TitleForm = styled.form`
@@ -46,6 +46,7 @@ const InfoForm = styled.div`
   align-items: center;
   height: 18px;
   margin-bottom: 20px;
+  text-align: right;
 `;
 const SelectCategory = styled.select`
   width: 120px;
@@ -53,7 +54,7 @@ const SelectCategory = styled.select`
   border: 0px;
 `;
 // 작성자, 비밀번호 입력 폼
-const UserInfoForm = styled.form`
+export const UserInfoForm = styled.form`
   position: relative;
   display: flex;
   justify-content: right;
@@ -66,7 +67,7 @@ const ToolContainer = styled.div`
   margin-bottom: 20px;
 `;
 const ContentContainer = styled.div`
-  height: 50vh;
+  height: 400px;
 `;
 
 const SubmitContainer = styled.div`
@@ -76,7 +77,6 @@ const SubmitContainer = styled.div`
 `;
 
 const SubmitBtn = styled.button`
-  position: relative;
   width: 120px;
   height: 43px;
   background: #2152f4;
@@ -87,6 +87,7 @@ const SubmitBtn = styled.button`
   font-style: normal;
   font-size: 20px;
   cursor: pointer;
+  margin-top: 30px;
 `;
 const Write = () => {
   const [title, setTitle] = useState('');
@@ -222,8 +223,9 @@ const Write = () => {
           placeholder="내용을 입력하세요"
           value={content}
           onChange={(value) => onChangeContent(value)}
+          rows={14}
           style={{
-            height: '50vh',
+            height: '350px',
             resize: 'none',
             fontSize: '18px',
           }}

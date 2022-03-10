@@ -20,6 +20,7 @@ const Router = () => {
         <Route path={'/teambuild'} element={<TeamBuild />} />
         <Route path={'/daily'} element={<Daily />} />
         <Route path={'/write'} element={<Write />} />
+        <Route path={'/post'} element={<Post />} />
       </Routes>
     </BrowserRouter>
   );
