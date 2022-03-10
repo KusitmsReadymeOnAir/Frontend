@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import Header from '../Components/Header';
-import PostsRouter from './PostsRouter';
 import styled from 'styled-components';
 import internal from 'stream';
 
@@ -35,9 +34,7 @@ const Posts = () => {
   },[])
   return (
     <>
-    <Header />
     <Container>
-      <PostsRouter/>
       <Category>
         {/*<CategoryBtn isClick={isClick}>디자인</CategoryBtn>*/}
         <CategoryBtn>개발</CategoryBtn>
@@ -102,5 +99,4 @@ box-shadow: 4px 4px 0px #000000;
 border-radius: 12px;
 margin: 0 auto;
 `
-
 export default Posts;
