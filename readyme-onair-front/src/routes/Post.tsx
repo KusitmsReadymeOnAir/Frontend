@@ -4,7 +4,6 @@ import { EditText } from 'react-edit-text';
 import { UserInfoForm } from './Write';
 
 // 개별 게시글 페이지
-
 const Container = styled.div`
   background-color: #cee9f8;
   width: 100%;
