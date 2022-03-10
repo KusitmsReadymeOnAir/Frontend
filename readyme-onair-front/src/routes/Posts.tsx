@@ -11,6 +11,7 @@ import TeamBuild from './Categories/TeamBuild';
 import Daily from './Categories/Daily';
 
 // 게시글 리스트 페이지
+
 const Posts = () => {
   //검색->카테고리
   const [designClick, setDesignClick]=useState<boolean>(false);
@@ -23,7 +24,7 @@ const Posts = () => {
   const categoryPost=()=>{
     switch(category){
       case "":
-        return (<All></All>);
+        return (<All searchText={searchText} searchOption={searchOption}></All>);
       case "design":
         return(<Design></Design>);
       case "develop":
@@ -36,15 +37,30 @@ const Posts = () => {
         return (<Daily/>)
     }
   }
+  const [searchText, setSearchText]=useState<string>("");
+  const [searchOption, setSearchOption]=useState<string>("");
   
   
-  useEffect(()=>{
-   ;
-  },[])
   return (
     <>
     <Container>
-     <input>
+      <select onChange={(e) => setSearchOption(e.target.value)}>
+    		<option value="S">작성자</option>
+    		<option value="M">제목</option>
+    		<option value="L">내용</option>
+    		<option value="XL">제목/내용</option>
+   		</select>
+
+
+     <input
+     onChange={
+       (e)=>setSearchText(e.target.value)
+     }
+     onSubmit={()=>{
+       setCategory("");
+       categoryPost();//<All></All>이 호출되도록
+     }}
+    >
      </input>
       <Category>
         <CategoryBtn isClick={designClick} onClick={()=>category==="design"? (setCategory("") , setDesignClick(false)):(setCategory("design"),setDesignClick(true))}>디자인</CategoryBtn>
@@ -81,6 +97,5 @@ const CategoryBtn=styled.button<isClick>`
   border-radius: 12px;
   margin-left:50px ;
 `
-
 
 export default Posts;
