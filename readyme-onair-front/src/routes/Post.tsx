@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { EditText } from 'react-edit-text';
 import { UserInfoForm } from './Write';
+import Comments from '../Components/Comments';
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -86,8 +87,7 @@ const sampleComment = [
   {
     boardId: 'user1',
     pw: '1234',
-    content:
-      'ㅇ러ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㄹ아ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ',
+    content: 'ddd',
     createdAt: '2022-03-10',
   },
   {
@@ -119,30 +119,7 @@ const Post = () => {
           <div>내용~~~~</div>
         </PostBox>
       </PostContainer>
-      <CommentContainer>
-        <h2>댓글</h2>
-        {sampleComment.map((com) => {
-          return (
-            <Comment>
-              <CommentId>{com.boardId}</CommentId>
-              <CommentContent>{com.content}</CommentContent>
-              <DelConatiner>
-                <DelBtn>삭제</DelBtn>
-              </DelConatiner>
-            </Comment>
-          );
-        })}
-        <h2>댓글 작성</h2>
-        <Comment>
-          <UserInfoForm>
-            <EditText />
-            <EditText />
-          </UserInfoForm>
-          <DelConatiner>
-            <DelBtn>저장</DelBtn>
-          </DelConatiner>
-        </Comment>
-      </CommentContainer>
+      <Comments />
     </Container>
   );
 };
