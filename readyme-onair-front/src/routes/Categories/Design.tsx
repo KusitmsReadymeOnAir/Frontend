@@ -45,7 +45,7 @@ const Design = () => {
 const PostsContainer=styled.div`
   display:grid ;
   grid-template-columns:repeat(auto-fill, minmax(33%,33%));
-  margin-top:50px ;
+  margin-top:90px ;
   row-gap:20px;
   
   grid-template-rows:1fr 1fr 1fr;
