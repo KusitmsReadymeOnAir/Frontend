@@ -1,14 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
+import { ModalProvider } from 'styled-react-modal';
 import Header from './Components/Header';
 import Router from './Router';
-import { theme } from './theme';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <>
-      <Header />
-      <Router />
+      <ModalProvider>
+        <Header />
+        <Router />
+      </ModalProvider>
     </>
   );
 };

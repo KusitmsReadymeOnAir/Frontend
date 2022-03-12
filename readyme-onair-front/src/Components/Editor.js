@@ -4,7 +4,12 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const editorConfig = {
   placeholder: '내용을 입력하세요',
-  height: '90%',
+  ckfinder: {
+    // Upload the images to the server using the CKFinder QuickUpload command
+    // You have to change this address to your server that has the ckfinder php connector
+    uploadUrl:
+      'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+  },
 };
 
 const Editor = ({ onChangeContent }) => {

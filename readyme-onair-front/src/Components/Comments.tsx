@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
+import { IComment } from '../routes/Post';
+import { currentUser } from './getCurrentUser';
+const API_URL = 'http://localhost:8000';
 
 // styled components
 const CommentContainer = styled.div`
@@ -21,7 +24,7 @@ const Comment = styled.div`
 const CommentId = styled.h3`
   margin: 0 auto;
   margin-left: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
 
 const CommentContent = styled.div`
@@ -55,63 +58,56 @@ const DelBtn = styled.button`
 
 const SaveBtn = styled(DelBtn)``;
 
-const sampleComment = [
-  {
-    boardId: 'user1',
-    pw: '1234',
-    content: 'content2',
-    createdAt: '2022-03-10',
-  },
-  {
-    boardId: 'user2',
-    pw: '5678',
-    content: 'content2',
-    createdAt: '2022-03-10',
-  },
-];
+const Comments = ({ comments }: any) => {
+  const [newComment, setNewComment] = useState<IComment>({
+    // 새로 등록할 댓글
+    writer: 'none',
+    pw: 99,
+    createdAt: new Date(Date.now()),
+    content: '',
+  });
 
-interface IComment {
-  _id: string;
-  boardId: number;
-  pw: number;
-  createdAt: Date;
-  Comment: string;
-}
+  // 댓글 등록
+  // useEffect(() => {
+  //   (async () => {
+  //     const comments = await (await fetch(API_URL + '')).json();
+  //     console.log(comments);
+  //   })();
+  // }, []);
 
-const Comments = () => {
-  const [comment, setComment] = useState('');
+  const onClickDelBtn = (writer: string) => {
+    // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
+    if (writer === currentUser) {
+      console.log('댓글 삭제');
+    }
+  };
 
   const onChangeComment = (value: string) => {
-    setComment(value);
+    setNewComment({
+      ...newComment,
+      content: value,
+    });
   };
 
   const onSubmit = () => {
-    console.log(1);
-    getData(() => {
-      getData((receivedComments: IComment[]) => {
-        console.log(receivedComments);
-      });
-    })(0, 1);
+    if (currentUser !== null) {
+      console.log(newComment);
+    } else {
+      console.log('로그인 페이지로 이동');
+    }
   };
-  type GetDataPromiseCallback = (a: IComment[]) => void;
-  const getData =
-    (fn: GetDataPromiseCallback) => (skip: number, limit: number) =>
-      fetch('http://localhost:8000/')
-        .then((res) => res.json())
-        .then(fn);
-
-  useEffect(onSubmit, []);
 
   return (
     <CommentContainer>
       <h2>댓글</h2>
-      {sampleComment.map((com) => {
+      {comments.map((comment: IComment) => {
+        const writer = comment.writer;
         return (
-          <Comment key={com.boardId}>
-            <CommentId>{com.boardId}</CommentId>
-            <CommentContent>{com.content}</CommentContent>
+          <Comment key={writer}>
+            <CommentId>{writer}</CommentId>
+            <CommentContent>{comment.content}</CommentContent>
             <ButtonContainer>
-              <DelBtn>삭제</DelBtn>
+              <DelBtn onClick={() => onClickDelBtn(writer)}>삭제</DelBtn>
             </ButtonContainer>
           </Comment>
         );
@@ -121,7 +117,7 @@ const Comments = () => {
         <EditTextarea
           id="comment"
           placeholder="내용을 입력하세요"
-          value={comment}
+          value={newComment.content}
           onChange={(value) => onChangeComment(value)}
           rows={2}
           style={{
@@ -132,7 +128,7 @@ const Comments = () => {
           }}
         />
         <ButtonContainer>
-          <SaveBtn onSubmit={onSubmit}>저장</SaveBtn>
+          <SaveBtn onClick={onSubmit}>등록</SaveBtn>
         </ButtonContainer>
       </Comment>
     </CommentContainer>
