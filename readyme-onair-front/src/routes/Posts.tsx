@@ -13,11 +13,12 @@ import axios from 'axios';
 
 // 게시글 리스트 페이지
 
+//서버 연동 테스트
 const Posts = () => {
-  /*useEffect(()=>{
+  useEffect(()=>{
     axios.get("/board/list")
     .then(()=>console.log("success"));
-  },[])*/
+  },[])
 
   
   const [designClick, setDesignClick]=useState<boolean>(false);
