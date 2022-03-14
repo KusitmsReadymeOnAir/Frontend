@@ -8,6 +8,7 @@ import PD from './routes/Categories/PD';
 import TeamBuild from './routes/Categories/TeamBuild';
 import Daily from './routes/Categories/Daily';
 import Write from './routes/Write';
+import { Login } from './routes/Login';
 
 const Router = () => {
   return (
@@ -21,6 +22,7 @@ const Router = () => {
         <Route path={'/daily'} element={<Daily />} />
         <Route path={'/write'} element={<Write />} />
         <Route path={'/post'} element={<Post />} />
+        <Route path={'/login'} element={<Login/>}></Route>
       </Routes>
     </BrowserRouter>
   );
