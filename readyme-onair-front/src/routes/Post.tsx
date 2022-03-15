@@ -10,6 +10,7 @@ import {
   BsHeartFill,
 } from 'react-icons/bs';
 import { BiFemaleSign } from 'react-icons/bi';
+import { useLocation } from 'react-router-dom';
 const API_URL = 'http://localhost:8080';
 
 // 개별 게시글 페이지
@@ -132,6 +133,7 @@ const DummyPost: IPost = {
 };
 
 const Post = () => {
+  const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>(DummyPost);
   const [comments, setComments] = useState(post.comments);
   const [modalShow, setModalShow] = useState(false);
@@ -140,10 +142,8 @@ const Post = () => {
 
   // useEffect(() => {
   //   (async () => {
-  //     const post = await (
-  //       await fetch(API_URL + '/board/list/622b6947fb6a4fdf1d331961')
-  //     ).json();
-  //     setPost(post);
+  //     const res = await (await fetch(API_URL + `/board/list/${id}`)).json();
+  //     setPost(res.board);
   //     setComments(post.comments);
   //   })();
   // }, []);

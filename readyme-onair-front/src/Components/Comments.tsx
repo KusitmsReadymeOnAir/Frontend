@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { IComment } from '../routes/Post';
 import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-const API_URL = 'http://localhost:8080';
 
 // styled components
 const CommentContainer = styled.div`
@@ -94,7 +93,10 @@ const Comments = ({ comments }: any) => {
   //   })();
   // }, []);
 
-  const onClickRepBtn = (writer: string) => {};
+  const onClickRepBtn = (writer: string) => {
+    if (currentUser !== null) {
+    }
+  };
 
   const onClickDelBtn = (writer: string) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
@@ -142,8 +144,8 @@ const Comments = ({ comments }: any) => {
             </Menu>
             <CommentId>{writer}</CommentId>
             <CommentContent>{comment.content}</CommentContent>
-            <Comment style={{ visibility: 'hidden' }}>
-              <CommentId>대댓긇</CommentId>
+            <Comment style={{ visibility: isRepOpen ? 'visible' : 'hidden' }}>
+              <CommentId>대댓글 작성자</CommentId>
               <CommentContent>대댓글</CommentContent>
             </Comment>
           </Comment>

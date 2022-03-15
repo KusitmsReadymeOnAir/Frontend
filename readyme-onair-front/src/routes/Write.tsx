@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
-import { BiBold, BiImage, BiItalic, BiStrikethrough } from 'react-icons/bi';
 import Editor from '../Components/Editor';
+const API_URL = 'http://localhost:8080';
 
 const options = [
   {
@@ -84,22 +85,47 @@ const SubmitBtn = styled.button`
   margin-top: 30px;
 `;
 
+interface IPost {
+  writer: string;
+  pw: number;
+}
+
 const Write = () => {
+  const [id, setId] = useState('622b6947fb6a4fdf1d331961');
   const [title, setTitle] = useState('');
+  const [writer, setWriter] = useState('작성자'); // Localstorage에서 받아올 것
+  const [pw, password] = useState(1234); // LocalStorage
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
-  const [imageId, setImgeId] = useState('첨부파일');
+  const [imageId, setImgId] = useState('첨부파일');
 
-  const postData = { title, content, category, imageId };
-  const onSubmit = () => {
-    fetch('http://localhost:8080/boards/write', {
+  // 서버로 데이터 전송
+  const postData: IPost = { writer, pw };
+  const onUpload = (e: any) => {
+    console.log(postData);
+    console.log(imageId);
+    e.preventDefault();
+    fetch(`${API_URL}/board/write`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(postData),
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      console.log(jsonRes);
     });
-    console.log('success');
+    // 이미지 POST
+    // fetch(`${API_URL}/board/imageUpload`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(imageId[0]),
+    // }).then(async (res) => {
+    //   const jsonRes = await res.json();
+    //   setId(jsonRes.board._id);
+    // });
   };
 
   const onChangeTitle = (value: string) => {
@@ -110,6 +136,11 @@ const Write = () => {
   };
   const onChangeContent = (value: string) => {
     setContent(value);
+  };
+  const onChangeImg = (e: any) => {
+    const file = e.target.files;
+    setImgId(file);
+    console.log(imageId);
   };
 
   return (
@@ -141,9 +172,15 @@ const Write = () => {
         </SelectCategory>
       </InfoForm>
       <ContentContainer>
-        <Editor onChangeContent={onChangeContent} />
+        <Editor onChangeContent={onChangeContent} setImgId={{ setImgId }} />
+        <form>
+          <input type="file" accept="img/*" onChange={onChangeImg} />
+        </form>
+        <img src={imageId[0]} alt="" />
         <SubmitContainer>
-          <SubmitBtn onSubmit={onSubmit}>업로드</SubmitBtn>
+          <Link to={`/post/${id}`}>
+            <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
+          </Link>
         </SubmitContainer>
       </ContentContainer>
     </Container>
