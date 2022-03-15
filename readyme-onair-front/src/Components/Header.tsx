@@ -12,13 +12,18 @@ const Header = () => {
                     <LogoText>레디미 온에어</LogoText>   
                 </HeaderLeft>
             </Link>
-               
             <HeaderRight>
                <Link to="/write">
                <HeaderBtn>새 글 작성</HeaderBtn>
                </Link>
-                
-            
+               <Link to="/mypage">
+               <User>
+               <UserImg src="../imgs/User.png"></UserImg>
+               <div>유저이름</div>
+               </User> 
+               </Link>
+              
+               
             </HeaderRight>
         </HeaderStyle>
     );
@@ -49,7 +54,9 @@ const LogoText=styled.div`
 `
 const HeaderRight=styled.span`
     float:right ;
-    margin-top: 40px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
 `
 const HeaderBtn=styled.button`
     width: 176px;
@@ -62,5 +69,14 @@ const HeaderBtn=styled.button`
     margin-right:38px ;
     font-style: normal;
     font-size: 20px;
+    margin-top: 20px;
+`
+const User=styled.div`
+    display: flex;
+    flex-direction: column;
+    
+`
+const UserImg=styled.img`
+    margin-bottom: 10px;
 `
 export default Header;

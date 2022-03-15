@@ -20,7 +20,16 @@ const All=({searchText, searchOption}: search)=>{
      console.log("ALL");
      console.log(searchOption);
      console.log(searchText);
-    const [posts, setPosts]=useState<any[]>([])
+    const [posts, setPosts]=useState<any[]>([ {
+      "_id": "6226fed1aa058eaab230059e",
+      "title": "테스트 글1",
+      "content": "테스트 내용",
+      "category": 1,
+      "writer": "test1",
+      "pw": 1234,
+      "imageId": "이미지 번호",
+      "date": "2022-03-08T06:59:29.920Z"
+  },])
     useEffect(()=>{
       //검색어가 존재한다면 
       if (searchText!=""){
@@ -99,6 +108,8 @@ const All=({searchText, searchOption}: search)=>{
                   </LikeBtns>
                 </CardTitle>
                 <Title>{item.title}</Title>
+                <Foot>
+                  <Category>카테고리명</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
@@ -107,6 +118,8 @@ const All=({searchText, searchOption}: search)=>{
                       String(item.date).substr(11, 12).split(":")[1]}
                   </span>
                 </Date>
+                </Foot>
+                
               </Card>  
         )})}
         <WarnModal
@@ -170,6 +183,15 @@ const Title=styled.div`
   margin-left: 35px;
   font-size: 32px;
   font-weight: bold;
+  height: 107px;
+
+`
+const Foot=styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+`
+const Category=styled.div`
 `
 const Date=styled.div`
   position: absolute;
