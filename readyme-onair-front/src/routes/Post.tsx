@@ -140,13 +140,13 @@ const Post = () => {
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await (await fetch(API_URL + `/board/list/${id}`)).json();
-  //     setPost(res.board);
-  //     setComments(post.comments);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const res = await (await fetch(API_URL + `/board/list/${id}`)).json();
+      setPost(res.board);
+      setComments(post.comments);
+    })();
+  }, []);
 
   // board/show/:id'
   const onClick = (btnType: string) => {

@@ -86,21 +86,24 @@ const SubmitBtn = styled.button`
 `;
 
 interface IPost {
-  writer: string;
-  pw: number;
+  title: string;
+  content: string;
+  category: string;
+  userId: string;
+  //imageId: string
 }
 
 const Write = () => {
   const [id, setId] = useState('622b6947fb6a4fdf1d331961');
   const [title, setTitle] = useState('');
-  const [writer, setWriter] = useState('작성자'); // Localstorage에서 받아올 것
-  const [pw, password] = useState(1234); // LocalStorage
+  const [writer, setWriter] = useState('작성자'); // userId로 수정, Localstorage에서 받아올 것
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
   const [imageId, setImgId] = useState('첨부파일');
 
   // 서버로 데이터 전송
-  const postData: IPost = { writer, pw };
+  const userId = '112621480984372521402';
+  const postData: IPost = { title, content, category, userId };
   const onUpload = (e: any) => {
     console.log(postData);
     console.log(imageId);
@@ -113,7 +116,7 @@ const Write = () => {
       body: JSON.stringify(postData),
     }).then(async (res) => {
       const jsonRes = await res.json();
-      console.log(jsonRes);
+      setId(jsonRes.data._id);
     });
     // 이미지 POST
     // fetch(`${API_URL}/board/imageUpload`, {
