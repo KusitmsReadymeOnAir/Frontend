@@ -57,7 +57,32 @@ const Posts = () => {
   return (
     <>
     <Container>
-      <Category>
+      <SearchContainer>
+      <SearchInput
+            onChange={
+              (e)=>setSearchText(e.target.value)
+            }
+            onSubmit={()=>{
+              setCategory("");
+              categoryPost();//<All></All>이 호출되도록
+            }}
+            >
+        </SearchInput> 
+        <SearchOption>
+         <div>
+         <select onChange={(e) => setSearchOption(e.target.value)}>
+            <option>검색 유형</option>
+            <option value="writer">작성자</option>
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="title_content">제목/내용</option>
+          </select>
+         </div>
+        </SearchOption>
+      </SearchContainer>
+    
+         
+     <Category>
         <CategoryBtn isClick={click[0]} onClick={
           ()=>category==="design"
           ? (setCategory("") , setClick([false, false,false, false, false]))
@@ -94,38 +119,23 @@ const Posts = () => {
             일상
           </CategoryBtn>
       </Category>
-      <SearchContainer>
-        <select onChange={(e) => setSearchOption(e.target.value)}>
-          <option>검색 유형</option>
-          <option value="writer">작성자</option>
-          <option value="title">제목</option>
-          <option value="content">내용</option>
-          <option value="title_content">제목/내용</option>
-        </select>
-      <SearchInput
-          onChange={
-            (e)=>setSearchText(e.target.value)
-          }
-          onSubmit={()=>{
-            setCategory("");
-            categoryPost();//<All></All>이 호출되도록
-          }}
-          >
-      </SearchInput>
-      </SearchContainer>
+      
       {categoryPost()}
     </Container>
     </>
   ); 
 };
+
 const Container=styled.div`
   background-color:#2152F4 ;
-  text-align: center;
   min-height: 800px;
+  display: flex;
+  flex-direction: column;
 `
 const Category=styled.div`
   text-align: center;
   padding-top:30px ;
+  width: 100%;
 `
 type isClick={
   isClick:boolean;
@@ -142,10 +152,14 @@ const CategoryBtn=styled.button<isClick>`
   margin-left:50px ;
 `
 const SearchContainer=styled.div`
-  float: right;
   margin: 20px;
 `
+const SearchOption=styled.div`
+ float: right;
+ margin-top: 13px;
+`
 const SearchInput=styled.input`
+float: right;
     width: 205px;
     height: 35px;
     border-radius: 5px;
