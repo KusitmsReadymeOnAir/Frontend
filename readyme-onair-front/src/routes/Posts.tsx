@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
-import Header from '../Components/Header';
+import React, {useState } from 'react';
 import styled from 'styled-components';
-import internal from 'stream';
 import Design from './Categories/Design';
 import All from './Categories/All';
 import Devlop from './Categories/Develop';
 import PD from './Categories/PD';
 import TeamBuild from './Categories/TeamBuild';
 import Daily from './Categories/Daily';
-import axios from 'axios';
+
 
 // 게시글 리스트 페이지
 const Posts = () => {

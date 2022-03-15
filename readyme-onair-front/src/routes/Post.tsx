@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Comments from '../Components/Comments';
 import { currentUser } from '../Components/getCurrentUser';
@@ -10,7 +10,8 @@ import {
   BsHeartFill,
 } from 'react-icons/bs';
 import { BiFemaleSign } from 'react-icons/bi';
-const API_URL = 'http://localhost:8000';
+import { useLocation } from 'react-router-dom';
+const API_URL = 'http://localhost:8080';
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -132,11 +133,20 @@ const DummyPost: IPost = {
 };
 
 const Post = () => {
-  const post = DummyPost;
+  const id = useLocation().pathname.toString().substring(6);
+  const [post, setPost] = useState<IPost>(DummyPost);
   const [comments, setComments] = useState(post.comments);
   const [modalShow, setModalShow] = useState(false);
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await (await fetch(API_URL + `/board/list/${id}`)).json();
+  //     setPost(res.board);
+  //     setComments(post.comments);
+  //   })();
+  // }, []);
 
   // board/show/:id'
   const onClick = (btnType: string) => {
@@ -185,7 +195,11 @@ const Post = () => {
           )}
         </ScrapBtn>
         <LikeBtn onClick={onClickLike}>
-          {like === false ? <BsHeart size="35" /> : <BsHeartFill size="35" />}
+          {like === false ? (
+            <BsHeart size="35" />
+          ) : (
+            <BsHeartFill size="35" color="violet" />
+          )}
         </LikeBtn>
       </LikeBtns>
       <Comments comments={comments} setComments={setComments} />
