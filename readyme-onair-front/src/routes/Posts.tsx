@@ -12,27 +12,33 @@ import Daily from './Categories/Daily';
 import axios from 'axios';
 
 // 게시글 리스트 페이지
-
-//서버 연동 테스트
 const Posts = () => {
-  useEffect(()=>{
-    axios.get("/board/list")
-    .then(()=>console.log("success"));
+  const [posts, setPosts]=useState([]);
+  //useEffect(()=>{
+    /*try {
+      fetch('http://localhost:8080/board/list', {
+        method : "GET",
+        headers : { 'Content-Type' : 'application/json'},
+      })//.then( (res) => { return res.json(); })
+      //.then( (res)=>console.log(JSON.stringify(res)));
+      
+    }
+    catch(err) { console.log(err); }*/
+    /* axios.get("http://localhost:8080/board/list")
+     .then((res)=>{console.log(res.data.boardData);
+      setPosts(res.data.boardData);
+    });
   },[])
-
+ */
   
-  const [designClick, setDesignClick]=useState<boolean>(false);
-  const [developClick, setDevelopClick]=useState<boolean>(false);
-  const [pdClick, setPdClick]=useState<boolean>(false);
-  const [teambuildClick, setTeambuildClick]=useState<boolean>(false);
-  const [dailyClick, setDailyClick]=useState<boolean>(false);
-
   //각 버튼들 클릭 유무를 배열로 관리해서 하나 클릭하면 그 전에 클릭했던거 색 없어지도록 하기
   //[디자인, 개발, 기획, 프로젝트모집, 일상]
   const [click, setClick]=useState<boolean[]>([false, false, false, false, false])
-
+  const [searchText, setSearchText]=useState<string>("");
+  const [searchOption, setSearchOption]=useState<string>("");
   const [category, setCategory]=useState<string>("");
   const categoryPost=()=>{
+   
     switch(category){
       case "":
         return (<All searchText={searchText} searchOption={searchOption}></All>);
@@ -48,14 +54,9 @@ const Posts = () => {
         return (<Daily/>)
     }
   }
-  const [searchText, setSearchText]=useState<string>("");
-  const [searchOption, setSearchOption]=useState<string>("");
-  
-  
   return (
     <>
     <Container>
-      
       <Category>
         <CategoryBtn isClick={click[0]} onClick={
           ()=>category==="design"
@@ -95,10 +96,11 @@ const Posts = () => {
       </Category>
       <SearchContainer>
         <select onChange={(e) => setSearchOption(e.target.value)}>
-          <option value="S">작성자</option>
-          <option value="M">제목</option>
-          <option value="L">내용</option>
-          <option value="XL">제목/내용</option>
+          <option>검색 유형</option>
+          <option value="writer">작성자</option>
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="title_content">제목/내용</option>
         </select>
       <SearchInput
           onChange={
