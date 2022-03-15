@@ -47,11 +47,11 @@ const EditBtn = styled(CategoryName)`
   color: #2152f4;
   background: #fff;
   border-color: #2152f4;
-  &: hover {
+  /*&: hover {
     color: #fff;
     background: #2152f4;
   }
-  cursor: pointer;
+  cursor: pointer;*/
 `;
 const DelBtn = styled(EditBtn)``;
 const PostBox = styled.div`
