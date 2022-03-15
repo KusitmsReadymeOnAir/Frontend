@@ -1,5 +1,5 @@
 import React from "react";
-import PostsForm from "./PostsForm";
+import PostsForm from "../PostsForm";
 
 const Daily = () => {
   console.log("daily")
