@@ -17,7 +17,7 @@ const MessageContainer = styled.div`
 
 const BtnContainer = styled(MessageContainer)``;
 const CloseBtn = styled.button`
-  width: 100px;
+  width: 120px;
   height: 30px;
   background: #2152f4;
   border-radius: 20px;
@@ -38,6 +38,7 @@ interface IModal {
 const WarnModal = (props: IModal) => {
   const toggleModal = () => {
     props.setModalShow(!props.show);
+    window.location.href="/login";
   };
 
   return (
@@ -50,7 +51,7 @@ const WarnModal = (props: IModal) => {
         <h4>{props.message}</h4>
       </MessageContainer>
       <BtnContainer>
-        <CloseBtn onClick={toggleModal}>Close</CloseBtn>
+        <CloseBtn onClick={toggleModal}>로그인 하러가기</CloseBtn>
       </BtnContainer>
     </StyledModal>
   );

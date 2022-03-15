@@ -2,9 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Write from "../Write";
-import { currentUser } from '../../Components/getCurrentUser';
-import WarnModal from '../../Components/WarnModal';
+import { currentUser } from '../Components/getCurrentUser';
+import WarnModal from '../Components/WarnModal';
 import {
   BsBookmark,
   BsBookmarkFill,
@@ -12,37 +11,16 @@ import {
   BsHeartFill,
 } from 'react-icons/bs';
 
-interface search{
-  searchText:string;
-  searchOption:string;
+interface category{
+    category:string,
 }
-const All=({searchText, searchOption}: search)=>{
-     console.log("ALL");
-     console.log(searchOption);
-     console.log(searchText);
+const PostsForm = (category: category) => {
     const [posts, setPosts]=useState<any[]>([])
     useEffect(()=>{
-      //검색어가 존재한다면 
-      if (searchText!=""){
-        //axios로 검색 결과 받아서 setPost()
-        console.log("search")
-        axios.get("http://localhost:8080/board/search",{
-          params:{
-            option : searchOption,
-            content: searchText
-          }
-        }).then((res)=>
-          {console.log("searchSuc");
-          console.log(res.data.searchData);
-            setPosts(res.data.searchData)
-          }
-        )
-      }else{
-        //검색어가 따로 없다면 
-        axios.get("http://localhost:8080/board/list")
-        .then((res)=>{console.log("suc"); console.log(res.data.boardData); setPosts(res.data.boardData)})
-      }
-    },[searchOption, searchText])
+        console.log(category);
+        axios.get(`http://localhost:8080/board/list/${category.category}`)
+        .then((res)=>{console.log(res.data.categoriedData); setPosts(res.data.categoriedData)})
+      },[])
     const [modalShow, setModalShow]=useState(false);
     const [isLogin, setIsLogin]=useState(false);
     
@@ -69,7 +47,8 @@ const All=({searchText, searchOption}: search)=>{
       //추천수 1 증가시키기
 
     };
-    return(<>
+    
+    return (<>
     <PostsContainer>
     {posts && posts.map((item)=>{
           return (
@@ -185,4 +164,4 @@ const LikeBtn = styled(ScrapBtn)`
   margin-right: 20px;
 `;
 
-export default All;
+export default PostsForm;

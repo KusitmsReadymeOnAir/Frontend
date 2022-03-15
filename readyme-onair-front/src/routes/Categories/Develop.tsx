@@ -1,8 +1,11 @@
 import React from 'react';
+import PostsForm from '../PostsForm';
 // 게시글 리스트 - 카테고리: 개발
 
 const Devlop = () => {
-  return <div>Develop</div>;
+  return (
+    <PostsForm category="개발"></PostsForm>
+  );
 };
 
 export default Devlop;

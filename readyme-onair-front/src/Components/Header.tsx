@@ -1,17 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 
 const Header = () => {
     return (
         <HeaderStyle>
-            <span>
-                <img src="../imgs/logo.png"></img> 
-                <LogoText>레디미 온에어</LogoText>   
-            </span>
+            <Link to="/">
+            <HeaderLeft>
+                    <LogoImg src="../imgs/logo.png"></LogoImg> 
+                    <LogoText>레디미 온에어</LogoText>   
+                </HeaderLeft>
+            </Link>
+               
             <HeaderRight>
-                <HeaderBtn>새 글 작성</HeaderBtn>
-                <SearchInput/>
+               <Link to="/write">
+               <HeaderBtn>새 글 작성</HeaderBtn>
+               </Link>
+                
+            
             </HeaderRight>
         </HeaderStyle>
     );
@@ -21,18 +28,28 @@ const HeaderStyle=styled.div`
     padding:30px 50px 30px 50px;
     
 `
-const LogoText=styled.span`
+const HeaderLeft=styled.div`
+    float: left;
+    display: flex;
+    margin-top: 10px;
+`
+const LogoImg=styled.img`
+    
+`
+const LogoText=styled.div`
     width: 182px;
+    height: 100%;
     font-family: Roboto;
     font-style: normal;
     font-weight: 800;
     font-size: 24px;
     line-height: 28px;
-    text-align: center;
+    margin-top: 15px;
     color: #C4C4C4;
 `
 const HeaderRight=styled.span`
     float:right ;
+    margin-top: 40px;
 `
 const HeaderBtn=styled.button`
     width: 176px;
@@ -45,12 +62,5 @@ const HeaderBtn=styled.button`
     margin-right:38px ;
     font-style: normal;
     font-size: 20px;
-`
-const SearchInput=styled.input`
-    
-`
-const SearchIcon=styled.img`
-    position:absolute ;
-    src:"../imgs/search.png" ;
 `
 export default Header;

@@ -1,8 +1,10 @@
-import React from 'react';
-// 게시글 리스트 - 카테고리: 일상
+import React from "react";
+import PostsForm from "../PostsForm";
 
 const Daily = () => {
-  return <div></div>;
-};
-
+  console.log("daily")
+  return(
+    <PostsForm category="일상"></PostsForm>
+  );
+}
 export default Daily;
