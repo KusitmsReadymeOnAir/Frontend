@@ -82,6 +82,7 @@ const All=({searchText, searchOption}: search)=>{
               <CardImg src="../imgs/Image.png"></CardImg>
               } 
               <CardTitle>
+                  <WriterImg src="../imgs/User.png"></WriterImg>
                   <Writer>{item.writer}</Writer>
                   {/*좋아요, 스크랩 버튼 하나씩만 눌리게 하는 건 api 나오면 하겠음. 어떤 형태로 서버에 줘야할 지 모르겠어서*/}
                   <LikeBtns>
@@ -97,7 +98,8 @@ const All=({searchText, searchOption}: search)=>{
                     </LikeBtn>
                   </LikeBtns>
                 </CardTitle>
-                <div>{item.title}</div><Date>
+                <Title>{item.title}</Title>
+                <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
                     {String(item.date).substr(11, 12).split(":")[0] +
@@ -140,12 +142,17 @@ position: relative;
 `
 const CardTitle=styled.div`
 display: flex;
+margin-left: 20px;
+margin-top: 10px;
 `
 const Writer=styled.div`
-font-size: 24px;
+  font-size: 24px;
   float: left;
   width: 50%;
   margin-top: 15px;
+`
+const WriterImg=styled.img`
+
 `
 const LikeBtns = styled.div`
   width: 90%;
@@ -156,6 +163,13 @@ const LikeBtns = styled.div`
 `;
 const CardImg=styled.img`
   width: 300px;
+`
+const Title=styled.div`
+  margin-top: 10px;
+  text-align: left;
+  margin-left: 35px;
+  font-size: 32px;
+  font-weight: bold;
 `
 const Date=styled.div`
   position: absolute;
