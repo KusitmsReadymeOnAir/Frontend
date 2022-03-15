@@ -3,7 +3,8 @@ import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
 import { IComment } from '../routes/Post';
 import { currentUser } from './getCurrentUser';
-const API_URL = 'http://localhost:8000';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+const API_URL = 'http://localhost:8080';
 
 // styled components
 const CommentContainer = styled.div`
@@ -35,20 +36,26 @@ const CommentContent = styled.div`
   padding-left: 10px;
 `;
 
-const ButtonContainer = styled.div`
+const Menu = styled.div`
   display: flex;
   justify-content: right;
-  align-items: center;
 `;
 
-const DelBtn = styled.button`
+const ButtonContainer = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+`;
+
+const Btn = styled.button`
   background: #2152f4;
   border-radius: 25px;
   border-style: none;
   border-color: #fff;
   color: #fff;
   text-align: center;
-  margin-left: 20px;
+  margin-bottom: 10px;
   cursor: pointer;
   position: relative;
   font-size: 14px;
@@ -56,7 +63,9 @@ const DelBtn = styled.button`
   height: 34px;
 `;
 
-const SaveBtn = styled(DelBtn)``;
+const SaveBtn = styled(Btn)`
+  margin-top: 40px;
+`;
 
 const Comments = ({ comments }: any) => {
   const [newComment, setNewComment] = useState<IComment>({
@@ -66,14 +75,26 @@ const Comments = ({ comments }: any) => {
     createdAt: new Date(Date.now()),
     content: '',
   });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  const [isRepOpen, setIsRepOpen] = useState(false);
+  const toggleRep = () => {
+    setIsRepOpen(!isRepOpen);
+  };
 
   // 댓글 등록
   // useEffect(() => {
   //   (async () => {
-  //     const comments = await (await fetch(API_URL + '')).json();
-  //     console.log(comments);
+  //     const comments = await (
+  //       await fetch(API_URL + '/board/list/622b6947fb6a4fdf1d331961')
+  //     ).json();
+  //     console.log(comments.title);
   //   })();
   // }, []);
+
+  const onClickRepBtn = (writer: string) => {};
 
   const onClickDelBtn = (writer: string) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
@@ -104,11 +125,27 @@ const Comments = ({ comments }: any) => {
         const writer = comment.writer;
         return (
           <Comment key={writer}>
+            <Menu>
+              <BsThreeDotsVertical
+                onClick={toggleMenu}
+                size={20}
+                style={{ cursor: 'pointer' }}
+              />
+              {isMenuOpen ? (
+                <ButtonContainer>
+                  <Btn onClick={toggleRep}>답글 달기</Btn>
+                  <Btn onClick={() => onClickDelBtn(writer)}>삭제</Btn>
+                </ButtonContainer>
+              ) : (
+                <></>
+              )}
+            </Menu>
             <CommentId>{writer}</CommentId>
             <CommentContent>{comment.content}</CommentContent>
-            <ButtonContainer>
-              <DelBtn onClick={() => onClickDelBtn(writer)}>삭제</DelBtn>
-            </ButtonContainer>
+            <Comment style={{ visibility: 'hidden' }}>
+              <CommentId>대댓긇</CommentId>
+              <CommentContent>대댓글</CommentContent>
+            </Comment>
           </Comment>
         );
       })}

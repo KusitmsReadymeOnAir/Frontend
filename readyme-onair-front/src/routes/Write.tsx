@@ -92,7 +92,7 @@ const Write = () => {
 
   const postData = { title, content, category, imageId };
   const onSubmit = () => {
-    fetch('http://localhost:8000/boards/write', {
+    fetch('http://localhost:8080/boards/write', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
