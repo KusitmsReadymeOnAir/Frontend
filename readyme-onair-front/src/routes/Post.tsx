@@ -90,67 +90,38 @@ interface IPost {
   title: string;
   content: string;
   category: string;
-  writer: string;
-  pw: number;
-  imageId: string;
+  userId: { _id: string; name: string };
   date: Date;
-  comments: IComment[];
 }
 
 export interface IComment {
-  writer: string;
-  pw: number;
+  boardId: string;
+  userId: { _id: string; name: string };
   createdAt: Date;
-  content: string;
+  comment: string;
+  isDeleted: boolean;
+  childComments: IComment[];
 }
-
-// 게시물의 댓글 샘플
-const sampleComments: IComment[] = [
-  {
-    writer: '가나',
-    pw: 1234,
-    createdAt: new Date('2022-03-01'),
-    content: '최고예요!',
-  },
-  {
-    writer: '다라',
-    pw: 5678,
-    createdAt: new Date('2022-03-03'),
-    content: '응원합니다',
-  },
-];
-
-// 게시물 샘플
-const DummyPost: IPost = {
-  title: '기업 프로젝트 회고록',
-  content: '큐시즘에서 레디미 기업 프로젝트를 진행했다.',
-  category: '개발',
-  writer: '최은형',
-  pw: 1234,
-  imageId: '../imgs/Image.png',
-  date: new Date('2022-03-12'),
-  comments: sampleComments,
-};
 
 const Post = () => {
   const id = useLocation().pathname.toString().substring(6);
-  const [post, setPost] = useState<IPost>(DummyPost);
-  const [comments, setComments] = useState(post.comments);
+  const [post, setPost] = useState<IPost>();
+  const [comments, setComments] = useState<IComment[]>();
   const [modalShow, setModalShow] = useState(false);
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const res = await (await fetch(API_URL + `/board/list/${id}`)).json();
+      const res = await (await fetch(API_URL + `/board/show/${id}`)).json();
+      console.log(res);
       setPost(res.board);
-      setComments(post.comments);
+      setComments(res.comment);
     })();
   }, []);
 
-  // board/show/:id'
   const onClick = (btnType: string) => {
-    if (post.writer !== currentUser) {
+    if (post?.userId._id !== currentUser) {
       // 게시물 작성자와 현재 사용자가 다른 경우
       setModalShow(true);
     } else if (btnType === 'edit') {
@@ -171,18 +142,16 @@ const Post = () => {
   return (
     <Container>
       <PostContainer>
-        <CategoryName>{post.category}</CategoryName>
-        <h1>{post.title}</h1>
+        <CategoryName>{post?.category}</CategoryName>
+        <h1>{post?.title}</h1>
         <PostBox>
           <PostBtns>
             <EditBtn onClick={() => onClick('edit')}>수정</EditBtn>
             <DelBtn onClick={() => onClick('delete')}>삭제</DelBtn>
           </PostBtns>
-          <ImageContainer>
-            <img src={post.imageId}></img>
-          </ImageContainer>
+          <ImageContainer></ImageContainer>
           <ContentContainer>
-            <p>{post.content}</p>
+            <p>{post?.content}</p>
           </ContentContainer>
         </PostBox>
       </PostContainer>

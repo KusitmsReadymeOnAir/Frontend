@@ -67,13 +67,8 @@ const SaveBtn = styled(Btn)`
 `;
 
 const Comments = ({ comments }: any) => {
-  const [newComment, setNewComment] = useState<IComment>({
-    // 새로 등록할 댓글
-    writer: 'none',
-    pw: 99,
-    createdAt: new Date(Date.now()),
-    content: '',
-  });
+  console.log(comments);
+  const [newComment, setNewComment] = useState<IComment>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -106,10 +101,11 @@ const Comments = ({ comments }: any) => {
   };
 
   const onChangeComment = (value: string) => {
-    setNewComment({
-      ...newComment,
-      content: value,
-    });
+    // setNewComment({
+    //   ...newComment,
+    //   comment: value,
+    // });
+    console.log(newComment);
   };
 
   const onSubmit = () => {
@@ -124,9 +120,8 @@ const Comments = ({ comments }: any) => {
     <CommentContainer>
       <h2>댓글</h2>
       {comments.map((comment: IComment) => {
-        const writer = comment.writer;
         return (
-          <Comment key={writer}>
+          <Comment key={comment.userId._id}>
             <Menu>
               <BsThreeDotsVertical
                 onClick={toggleMenu}
@@ -136,14 +131,16 @@ const Comments = ({ comments }: any) => {
               {isMenuOpen ? (
                 <ButtonContainer>
                   <Btn onClick={toggleRep}>답글 달기</Btn>
-                  <Btn onClick={() => onClickDelBtn(writer)}>삭제</Btn>
+                  <Btn onClick={() => onClickDelBtn(comment?.userId.name)}>
+                    삭제
+                  </Btn>
                 </ButtonContainer>
               ) : (
                 <></>
               )}
             </Menu>
-            <CommentId>{writer}</CommentId>
-            <CommentContent>{comment.content}</CommentContent>
+            <CommentId>{comment?.userId.name}</CommentId>
+            <CommentContent>{comment.comment}</CommentContent>
             <Comment style={{ visibility: isRepOpen ? 'visible' : 'hidden' }}>
               <CommentId>대댓글 작성자</CommentId>
               <CommentContent>대댓글</CommentContent>
@@ -156,7 +153,7 @@ const Comments = ({ comments }: any) => {
         <EditTextarea
           id="comment"
           placeholder="내용을 입력하세요"
-          value={newComment.content}
+          value={newComment?.comment}
           onChange={(value) => onChangeComment(value)}
           rows={2}
           style={{

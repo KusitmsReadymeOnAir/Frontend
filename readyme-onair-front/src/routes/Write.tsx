@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
@@ -100,6 +100,7 @@ const Write = () => {
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
   const [imageId, setImgId] = useState('첨부파일');
+  const navigate = useNavigate();
 
   // 서버로 데이터 전송
   const userId = '112621480984372521402';
@@ -117,6 +118,8 @@ const Write = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       setId(jsonRes.data._id);
+      localStorage.setItem('userId', userId);
+      navigate(`/post/${id}`);
     });
     // 이미지 POST
     // fetch(`${API_URL}/board/imageUpload`, {
@@ -143,7 +146,6 @@ const Write = () => {
   const onChangeImg = (e: any) => {
     const file = e.target.files;
     setImgId(file);
-    console.log(imageId);
   };
 
   return (
