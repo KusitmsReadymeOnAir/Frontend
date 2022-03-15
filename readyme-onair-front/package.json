@@ -24,6 +24,7 @@
     "react-bootstrap": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-edit-text": "^4.3.0",
+    "react-google-login": "^5.2.2",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@types/mongodb": "^4.0.7",
     "@types/react-edit-text": "^4.3.0",
-    "@types/react-router-dom": "^5.3.0"
+    "@types/react-router-dom": "^5.3.0",
+    "typescript-styled-plugin": "^0.18.2"
   }
 }

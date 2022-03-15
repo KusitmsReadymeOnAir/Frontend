@@ -12,9 +12,14 @@ export const Login = () => {
         </Notice>
         <GoogleLogin
             clientId="998580338911-ku2cplpoidtk01jb82k5sb133dsl70pv.apps.googleusercontent.com"
-            buttonText='구글로 로그인하기'
+            //buttonText='구글로 로그인하기'
             onSuccess={(res)=>console.log(res)}
             onFailure={(err)=>console.log(err)}
+            render={(renderProps)=>(
+                <GoogleBtn onClick={renderProps.onClick}>
+                    <BtnText>로그인하기</BtnText>
+                </GoogleBtn>
+            )}
            >    
             </GoogleLogin> 
         </Container>
@@ -33,4 +38,9 @@ const Notice=styled.div`
     font-size: 36px;
     margin-top: 50px;
     margin-bottom: 70px;
+`
+const GoogleBtn=styled.button`
+    
+`
+const BtnText=styled.div`
 `

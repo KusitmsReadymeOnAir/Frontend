@@ -1,16 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 
 const Header = () => {
     return (
         <HeaderStyle>
+            <Link to="/">
             <HeaderLeft>
-                <LogoImg src="../imgs/logo.png"></LogoImg> 
-                <LogoText>레디미 온에어</LogoText>   
-            </HeaderLeft>
+                    <LogoImg src="../imgs/logo.png"></LogoImg> 
+                    <LogoText>레디미 온에어</LogoText>   
+                </HeaderLeft>
+            </Link>
+               
             <HeaderRight>
-                <HeaderBtn>새 글 작성</HeaderBtn>
+               <Link to="/write">
+               <HeaderBtn>새 글 작성</HeaderBtn>
+               </Link>
+                
+            
             </HeaderRight>
         </HeaderStyle>
     );
