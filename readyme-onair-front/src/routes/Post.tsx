@@ -92,32 +92,24 @@ interface IPost {
   category: string;
   userId: { _id: string; name: string };
   date: Date;
-}
-
-export interface IComment {
-  boardId: string;
-  userId: { _id: string; name: string };
-  createdAt: Date;
-  comment: string;
-  isDeleted: boolean;
-  childComments: IComment[];
+  imageId?: string;
 }
 
 const Post = () => {
   const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>();
-  const [comments, setComments] = useState<IComment[]>();
   const [modalShow, setModalShow] = useState(false);
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const res = await (await fetch(API_URL + `/board/show/${id}`)).json();
-      console.log(res);
-      setPost(res.board);
-      setComments(res.comment);
-    })();
+    console.log(id);
+    fetch(`${API_URL}/board/show/` + id, {
+      method: 'GET',
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      setPost(jsonRes.board[0]);
+    });
   }, []);
 
   const onClick = (btnType: string) => {
@@ -149,7 +141,9 @@ const Post = () => {
             <EditBtn onClick={() => onClick('edit')}>수정</EditBtn>
             <DelBtn onClick={() => onClick('delete')}>삭제</DelBtn>
           </PostBtns>
-          <ImageContainer></ImageContainer>
+          <ImageContainer>
+            <img src={post?.imageId} alt="" />
+          </ImageContainer>
           <ContentContainer>
             <p>{post?.content}</p>
           </ContentContainer>
@@ -171,7 +165,7 @@ const Post = () => {
           )}
         </LikeBtn>
       </LikeBtns>
-      <Comments comments={comments} setComments={setComments} />
+      <Comments id={id} />
       <WarnModal
         show={modalShow}
         message={'로그인이 필요합니다.'}

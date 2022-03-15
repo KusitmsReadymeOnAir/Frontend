@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
-import { IComment } from '../routes/Post';
 import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+const API_URL = 'http://localhost:8080';
 
 // styled components
 const CommentContainer = styled.div`
@@ -66,8 +66,17 @@ const SaveBtn = styled(Btn)`
   margin-top: 40px;
 `;
 
-const Comments = ({ comments }: any) => {
-  console.log(comments);
+interface IComment {
+  boardId: string;
+  userId: { _id: string; name: string };
+  createdAt: Date;
+  comment: string;
+  isDeleted: boolean;
+  childComments?: IComment[];
+}
+
+const Comments = ({ id }: any) => {
+  const [comments, setComments] = useState<IComment[]>();
   const [newComment, setNewComment] = useState<IComment>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
@@ -87,6 +96,15 @@ const Comments = ({ comments }: any) => {
   //     console.log(comments.title);
   //   })();
   // }, []);
+
+  useEffect(() => {
+    fetch(`${API_URL}/board/show/` + id, {
+      method: 'GET',
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      setComments(jsonRes.comment);
+    });
+  }, []);
 
   const onClickRepBtn = (writer: string) => {
     if (currentUser !== null) {
@@ -119,7 +137,7 @@ const Comments = ({ comments }: any) => {
   return (
     <CommentContainer>
       <h2>댓글</h2>
-      {comments.map((comment: IComment) => {
+      {comments?.map((comment: IComment) => {
         return (
           <Comment key={comment.userId._id}>
             <Menu>

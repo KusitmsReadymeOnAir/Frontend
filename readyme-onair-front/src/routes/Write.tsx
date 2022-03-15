@@ -90,7 +90,7 @@ interface IPost {
   content: string;
   category: string;
   userId: string;
-  //imageId: string
+  imageId: string;
 }
 
 const Write = () => {
@@ -103,8 +103,9 @@ const Write = () => {
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
-  const userId = '112621480984372521402';
-  const postData: IPost = { title, content, category, userId };
+  const userId = '6230b20f9cd6ff244b055a75';
+  const postData: IPost = { title, content, category, userId, imageId };
+
   const onUpload = (e: any) => {
     console.log(postData);
     console.log(imageId);
@@ -117,21 +118,11 @@ const Write = () => {
       body: JSON.stringify(postData),
     }).then(async (res) => {
       const jsonRes = await res.json();
-      setId(jsonRes.data._id);
-      localStorage.setItem('userId', userId);
-      navigate(`/post/${id}`);
+      console.log('응답 : ', jsonRes);
+      // setId(jsonRes.data.id);
+      // localStorage.setItem('userId', userId);
+      // navigate(`/post/${id}`);
     });
-    // 이미지 POST
-    // fetch(`${API_URL}/board/imageUpload`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(imageId[0]),
-    // }).then(async (res) => {
-    //   const jsonRes = await res.json();
-    //   setId(jsonRes.board._id);
-    // });
   };
 
   const onChangeTitle = (value: string) => {
@@ -144,8 +135,19 @@ const Write = () => {
     setContent(value);
   };
   const onChangeImg = (e: any) => {
-    const file = e.target.files;
-    setImgId(file);
+    const file = e.target.files[0];
+    // const jsonData = JSON.stringify(file);
+    const formData = new FormData();
+    formData.append('imgs', file);
+    //이미지 POST
+    fetch(`${API_URL}/board/imageUpload`, {
+      method: 'POST',
+      body: formData,
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      setImgId(jsonRes.data);
+    });
+    // setImgId(file);
   };
 
   return (
@@ -178,10 +180,10 @@ const Write = () => {
       </InfoForm>
       <ContentContainer>
         <Editor onChangeContent={onChangeContent} setImgId={{ setImgId }} />
-        <form>
-          <input type="file" accept="img/*" onChange={onChangeImg} />
+        <form method="post" encType="multipart/form-data">
+          <input type="file" id="imgs" accept="img/*" onChange={onChangeImg} />
         </form>
-        <img src={imageId[0]} alt="" />
+        <img src={imageId} alt="" />
         <SubmitContainer>
           <Link to={`/post/${id}`}>
             <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
