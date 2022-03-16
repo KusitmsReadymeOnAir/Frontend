@@ -1,9 +1,17 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { currentUser } from './getCurrentUser';
 
 const Header = () => {
+    const [user, setUser]=useState<any[]>([{}]);
+    const id=localStorage.getItem("currentUser");
+    useEffect(()=>{
+        axios.get(`http://localhost:8080/mypage/user/${id}`)
+        .then((res)=>{;
+        setUser(res.data.userData);});
+    },[]);
     return (
         <HeaderStyle>
             <Link to="/">
@@ -12,19 +20,24 @@ const Header = () => {
                     <LogoText>레디미 온에어</LogoText>   
                 </HeaderLeft>
             </Link>
-            <HeaderRight>
-               <Link to="/write">
-               <HeaderBtn>새 글 작성</HeaderBtn>
-               </Link>
-               <Link to="/mypage">
-               <User>
-               <UserImg src="../imgs/User.png"></UserImg>
-               <div>유저이름</div>
-               </User> 
-               </Link>
-              
-               
-            </HeaderRight>
+            {
+                currentUser
+                ?
+                <HeaderRight>
+                    <Link to="/write">
+                    <HeaderBtn>새 글 작성</HeaderBtn>
+                    </Link>
+                    <Link to="/mypage"  style={{ textDecoration: "none", color:"black"}}>
+                    <User>
+                    <UserImg src="../imgs/User.png"></UserImg>
+                    <UserName>{user[0].name}</UserName>
+                    </User> 
+                    </Link>
+                </HeaderRight>
+                :
+                <div></div>
+            }
+            
         </HeaderStyle>
     );
 };
@@ -74,9 +87,11 @@ const HeaderBtn=styled.button`
 const User=styled.div`
     display: flex;
     flex-direction: column;
-    
 `
 const UserImg=styled.img`
     margin-bottom: 10px;
+`
+const UserName=styled.div`
+    text-align: center;
 `
 export default Header;
