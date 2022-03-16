@@ -100,7 +100,7 @@ const All=({searchText, searchOption}: search)=>{
                 </CardTitle>
                 <Title>{item.title}</Title>
                 <Foot>
-                  <Category>카테고리명</Category>
+                  <Category>{item.category}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
