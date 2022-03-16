@@ -3,7 +3,6 @@ import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
 import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useSSRSafeId } from '@react-aria/ssr';
 const API_URL = 'http://localhost:8080';
 
 // styled components
@@ -68,6 +67,7 @@ const SaveBtn = styled(Btn)`
 `;
 
 interface IComment {
+  _id: string;
   boardId: string;
   userId: { _id: string; name: string };
   createdAt: Date;
@@ -80,10 +80,10 @@ interface INewComment {
   comment: string;
   boardId: string;
   parendComment?: string;
-  userId: any;
+  userId: string | null;
 }
 
-const Comments = ({ id, modalShow, setModalShow }: any) => {
+const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
   const [comments, setComments] = useState<IComment[]>();
   const [newComment, setNewComment] = useState(''); // 새로 등록할 댓글
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -122,7 +122,7 @@ const Comments = ({ id, modalShow, setModalShow }: any) => {
     const postData: INewComment = {
       comment: newComment,
       boardId: id,
-      userId: { currentUser },
+      userId: currentUser,
     };
     if (currentUser !== null) {
       fetch(`${API_URL}/comment/addComment`, {
@@ -136,14 +136,35 @@ const Comments = ({ id, modalShow, setModalShow }: any) => {
         console.log(jsonRes);
       });
     } else {
+      setModalMessge('로그인이 필요합니다.')
       setModalShow(!modalShow);
     }
   };
 
-  const onClickDelBtn = (writer: string) => {
+  const onClickDelBtn = (commentId: string, userId: string) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
-    if (writer === currentUser) {
-      console.log('댓글 삭제');
+    // local storage 오류 발생
+    const currentUser = '62309fdd61e3bfc788d62c8d';
+    console.log(currentUser)
+    if (userId === currentUser) {
+      const delData = { commentId, userId}
+      fetch(`${API_URL}/comment/deleteComment`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(delData),
+      })
+      // 삭제 반영된 댓글 데이터 다시 가져와서 렌더링
+      fetch(`${API_URL}/board/show/` + id, {
+        method: 'GET',
+      }).then(async (res) => {
+        const jsonRes = await res.json();
+        setComments(jsonRes.comment);
+      });
+    } else {
+      setModalMessge('자신이 쓴 댓글만 삭제할 수 있습니다.')
+      setModalShow(!modalShow)
     }
   };
 
@@ -162,7 +183,7 @@ const Comments = ({ id, modalShow, setModalShow }: any) => {
               {isMenuOpen ? (
                 <ButtonContainer>
                   <Btn onClick={toggleRep}>답글 달기</Btn>
-                  <Btn onClick={() => onClickDelBtn(comment?.userId.name)}>
+                  <Btn onClick={() => onClickDelBtn(comment?._id, comment?.userId._id)}>
                     삭제
                   </Btn>
                 </ButtonContainer>

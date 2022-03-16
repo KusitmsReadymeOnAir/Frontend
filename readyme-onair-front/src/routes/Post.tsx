@@ -96,9 +96,11 @@ interface IPost {
 }
 
 const Post = () => {
+  const currentUser = '62309fdd61e3bfc788d62c8d'; // localStorage 오류 발생
   const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>();
   const [modalShow, setModalShow] = useState(false);
+  const [ modalMessage, setModalMessge] = useState('모달창 안내 메시지')
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
 
@@ -162,10 +164,12 @@ const Post = () => {
           )}
         </LikeBtn>
       </LikeBtns>
-      <Comments id={id} modalShow={modalShow} setModalShow={setModalShow} />
+      <Comments id={id} modalShow={modalShow} setModalShow={setModalShow} setModalMessge={setModalMessge} />
       <WarnModal
         show={modalShow}
-        message={'로그인이 필요합니다.'}
+        message={
+          modalMessage
+        }
         setModalShow={setModalShow}
       />
     </Container>
