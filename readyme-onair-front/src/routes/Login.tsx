@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { read } from 'fs';
 import React, { useState } from 'react'
 import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
@@ -10,18 +12,9 @@ export const Login = () => {
         <Notice>
             로그인 후 <br/> 이용 가능합니다.
         </Notice>
-        <GoogleLogin
-            clientId="998580338911-ku2cplpoidtk01jb82k5sb133dsl70pv.apps.googleusercontent.com"
-            //buttonText='구글로 로그인하기'
-            onSuccess={(res)=>console.log(res)}
-            onFailure={(err)=>console.log(err)}
-            render={(renderProps)=>(
-                <GoogleBtn onClick={renderProps.onClick}>
-                    <BtnText>로그인하기</BtnText>
-                </GoogleBtn>
-            )}
-           >    
-            </GoogleLogin> 
+        <a href='http://localhost:8080/auth/login'>
+        <LoginBtn>로그인하기</LoginBtn>     
+        </a>
         </Container>
         </div>
     )
@@ -39,8 +32,13 @@ const Notice=styled.div`
     margin-top: 50px;
     margin-bottom: 70px;
 `
-const GoogleBtn=styled.button`
-    
-`
-const BtnText=styled.div`
+const LoginBtn=styled.button`
+    height: 60px;
+    font-size: 24px;
+    padding: 12px 24px;
+    background: #fff;
+    color: black;
+    border: 4px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 12px;
 `
