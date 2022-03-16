@@ -133,7 +133,9 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         body: JSON.stringify(postData),
       }).then(async (res) => {
         const jsonRes = await res.json();
-        console.log(jsonRes);
+        console.log(jsonRes.comment);
+        // 서버에서 수정된 결과 넘겨 받아야함
+        setComments(jsonRes.comment);
       });
     } else {
       setModalMessge('로그인이 필요합니다.')

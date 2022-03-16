@@ -7,7 +7,7 @@ import Editor from '../Components/Editor';
 import { currentUser } from '../Components/getCurrentUser';
 const API_URL = 'http://localhost:8080';
 
-const options = [
+export const categories = [
   {
     value: 'design',
     name: '디자인',
@@ -50,7 +50,7 @@ const InfoForm = styled.div`
   margin-bottom: 20px;
   text-align: right;
 `;
-const SelectCategory = styled.select`
+export const SelectCategory = styled.select`
   width: 120px;
   font-size: 18px;
   border: 0px;
@@ -170,10 +170,10 @@ const Write = () => {
       </TitleForm>
       <InfoForm>
         <SelectCategory value={category} onChange={onChangeCategory}>
-          {options.map((option) => {
+          {categories.map((category) => {
             return (
-              <option key={option.value} value={option.value}>
-                {option.name}
+              <option key={category.value} value={category.value}>
+                {category.name}
               </option>
             );
           })}
