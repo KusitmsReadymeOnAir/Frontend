@@ -20,16 +20,7 @@ const All=({searchText, searchOption}: search)=>{
      console.log("ALL");
      console.log(searchOption);
      console.log(searchText);
-    const [posts, setPosts]=useState<any[]>([ {
-      "_id": "6226fed1aa058eaab230059e",
-      "title": "테스트 글1",
-      "content": "테스트 내용",
-      "category": 1,
-      "writer": "test1",
-      "pw": 1234,
-      "imageId": "이미지 번호",
-      "date": "2022-03-08T06:59:29.920Z"
-  },])
+    const [posts, setPosts]=useState<any[]>([])
     useEffect(()=>{
       //검색어가 존재한다면 
       if (searchText!=""){

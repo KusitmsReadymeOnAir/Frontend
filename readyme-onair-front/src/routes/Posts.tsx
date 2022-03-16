@@ -6,28 +6,14 @@ import Devlop from './Categories/Develop';
 import PD from './Categories/PD';
 import TeamBuild from './Categories/TeamBuild';
 import Daily from './Categories/Daily';
-
+import { useCookies } from 'react-cookie';
 
 // 게시글 리스트 페이지
 const Posts = () => {
-  const [posts, setPosts]=useState([]);
-  //useEffect(()=>{
-    /*try {
-      fetch('http://localhost:8080/board/list', {
-        method : "GET",
-        headers : { 'Content-Type' : 'application/json'},
-      })//.then( (res) => { return res.json(); })
-      //.then( (res)=>console.log(JSON.stringify(res)));
-      
-    }
-    catch(err) { console.log(err); }*/
-    /* axios.get("http://localhost:8080/board/list")
-     .then((res)=>{console.log(res.data.boardData);
-      setPosts(res.data.boardData);
-    });
-  },[])
- */
-  
+  const [cookies, setCookie]=useCookies();
+  if (cookies.user){
+    localStorage.setItem("currentUser", cookies.user);
+  }
   //각 버튼들 클릭 유무를 배열로 관리해서 하나 클릭하면 그 전에 클릭했던거 색 없어지도록 하기
   //[디자인, 개발, 기획, 프로젝트모집, 일상]
   const [click, setClick]=useState<boolean[]>([false, false, false, false, false])
