@@ -6,7 +6,7 @@ import { currentUser } from './getCurrentUser';
 
 const Header = () => {
     const [user, setUser]=useState<any[]>([{}]);
-    const id=localStorage.getItem("currentUser");
+    const id=localStorage.getItem("userId");
     useEffect(()=>{
         axios.get(`http://localhost:8080/mypage/user/${id}`)
         .then((res)=>{;
