@@ -103,7 +103,6 @@ const Post = () => {
   const [like, setLike] = useState(false);
 
   useEffect(() => {
-    console.log(id);
     fetch(`${API_URL}/board/show/` + id, {
       method: 'GET',
     }).then(async (res) => {
@@ -144,9 +143,7 @@ const Post = () => {
           <ImageContainer>
             <img src={post?.imageId} alt="" />
           </ImageContainer>
-          <ContentContainer>
-            <p>{post?.content}</p>
-          </ContentContainer>
+          <ContentContainer>{post?.content}</ContentContainer>
         </PostBox>
       </PostContainer>
       <LikeBtns>
@@ -165,7 +162,7 @@ const Post = () => {
           )}
         </LikeBtn>
       </LikeBtns>
-      <Comments id={id} />
+      <Comments id={id} modalShow={modalShow} setModalShow={setModalShow} />
       <WarnModal
         show={modalShow}
         message={'로그인이 필요합니다.'}

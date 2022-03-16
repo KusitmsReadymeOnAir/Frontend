@@ -3,6 +3,7 @@ import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
 import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { useSSRSafeId } from '@react-aria/ssr';
 const API_URL = 'http://localhost:8080';
 
 // styled components
@@ -75,9 +76,16 @@ interface IComment {
   childComments?: IComment[];
 }
 
-const Comments = ({ id }: any) => {
+interface INewComment {
+  comment: string;
+  boardId: string;
+  parendComment?: string;
+  userId: any;
+}
+
+const Comments = ({ id, modalShow, setModalShow }: any) => {
   const [comments, setComments] = useState<IComment[]>();
-  const [newComment, setNewComment] = useState<IComment>();
+  const [newComment, setNewComment] = useState(''); // 새로 등록할 댓글
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -87,16 +95,8 @@ const Comments = ({ id }: any) => {
     setIsRepOpen(!isRepOpen);
   };
 
-  // 댓글 등록
-  // useEffect(() => {
-  //   (async () => {
-  //     const comments = await (
-  //       await fetch(API_URL + '/board/list/622b6947fb6a4fdf1d331961')
-  //     ).json();
-  //     console.log(comments.title);
-  //   })();
-  // }, []);
-
+  // 사용자 정보 불러오기
+  // 댓글 불러오기
   useEffect(() => {
     fetch(`${API_URL}/board/show/` + id, {
       method: 'GET',
@@ -107,7 +107,36 @@ const Comments = ({ id }: any) => {
   }, []);
 
   const onClickRepBtn = (writer: string) => {
+    // 대댓글 등록
     if (currentUser !== null) {
+    }
+  };
+
+  // 댓글 값 변경
+  const onChangeNewComment = (value: string) => {
+    setNewComment(value);
+  };
+
+  // 새 댓글 등록
+  const onClickNewComment = () => {
+    const postData: INewComment = {
+      comment: newComment,
+      boardId: id,
+      userId: { currentUser },
+    };
+    if (currentUser !== null) {
+      fetch(`${API_URL}/comment/addComment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      }).then(async (res) => {
+        const jsonRes = await res.json();
+        console.log(jsonRes);
+      });
+    } else {
+      setModalShow(!modalShow);
     }
   };
 
@@ -115,22 +144,6 @@ const Comments = ({ id }: any) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
     if (writer === currentUser) {
       console.log('댓글 삭제');
-    }
-  };
-
-  const onChangeComment = (value: string) => {
-    // setNewComment({
-    //   ...newComment,
-    //   comment: value,
-    // });
-    console.log(newComment);
-  };
-
-  const onSubmit = () => {
-    if (currentUser !== null) {
-      console.log(newComment);
-    } else {
-      console.log('로그인 페이지로 이동');
     }
   };
 
@@ -171,8 +184,8 @@ const Comments = ({ id }: any) => {
         <EditTextarea
           id="comment"
           placeholder="내용을 입력하세요"
-          value={newComment?.comment}
-          onChange={(value) => onChangeComment(value)}
+          value={newComment}
+          onChange={(value) => onChangeNewComment(value)}
           rows={2}
           style={{
             marginBottom: '10px',
@@ -182,7 +195,7 @@ const Comments = ({ id }: any) => {
           }}
         />
         <ButtonContainer>
-          <SaveBtn onClick={onSubmit}>등록</SaveBtn>
+          <SaveBtn onClick={onClickNewComment}>등록</SaveBtn>
         </ButtonContainer>
       </Comment>
     </CommentContainer>
