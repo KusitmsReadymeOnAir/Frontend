@@ -12,7 +12,7 @@ import { useCookies } from 'react-cookie';
 const Posts = () => {
   const [cookies, setCookie]=useCookies();
   if (cookies.user){
-    localStorage.setItem("currentUser", cookies.user);
+    localStorage.setItem("userId", cookies.user);
   }
   //각 버튼들 클릭 유무를 배열로 관리해서 하나 클릭하면 그 전에 클릭했던거 색 없어지도록 하기
   //[디자인, 개발, 기획, 프로젝트모집, 일상]

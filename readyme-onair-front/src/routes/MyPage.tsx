@@ -13,16 +13,16 @@ const MyPage = () => {
     const [category, setCategory]=useState("post");
     const [posts, setPosts]=useState<any[]>([]);
     const [user, setUser]=useState<any[]>([{}]);
-    const id=localStorage.getItem("currentUser");
+    const id=localStorage.getItem("userId");
 
     useEffect(()=>{
-        axios.get(`http://localhost:8080/mypage/user/${id}`)
+        axios.get(`/mypage/user/${id}`)
         .then((res)=>{console.log(res.data.userData);
         setUser(res.data.userData);});
     },[]);
     useEffect(()=>{
         if (category==="post"){
-            axios.get(`http://localhost:8080/mypage/board/${id}`)
+            axios.get(`/mypage/board/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts( [{
                     "commentData": [
@@ -71,7 +71,7 @@ const MyPage = () => {
                 console.log(res.data.boardData)});
         }
         else if (category==="comment"){
-            axios.get(`http://localhost:8080/mypage/comment/${id}`)
+            axios.get(`/mypage/comment/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts([ {
                     "commentData": [
