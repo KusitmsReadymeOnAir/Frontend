@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import Editor from '../Components/Editor';
+import { currentUser } from '../Components/getCurrentUser';
 const API_URL = 'http://localhost:8080';
 
-const options = [
+export const categories = [
   {
     value: 'design',
     name: '디자인',
@@ -49,7 +50,7 @@ const InfoForm = styled.div`
   margin-bottom: 20px;
   text-align: right;
 `;
-const SelectCategory = styled.select`
+export const SelectCategory = styled.select`
   width: 120px;
   font-size: 18px;
   border: 0px;
@@ -94,7 +95,7 @@ interface IPost {
 }
 
 const Write = () => {
-  const [id, setId] = useState('622b6947fb6a4fdf1d331961');
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('작성자'); // userId로 수정, Localstorage에서 받아올 것
   const [category, setCategory] = useState('design');
@@ -103,7 +104,7 @@ const Write = () => {
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
-  const userId = '6230b20f9cd6ff244b055a75';
+  const userId :any= currentUser;
   const postData: IPost = { title, content, category, userId, imageId };
 
   const onUpload = (e: any) => {
@@ -119,9 +120,9 @@ const Write = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       console.log('응답 : ', jsonRes);
-      // setId(jsonRes.data.id);
-      // localStorage.setItem('userId', userId);
-      // navigate(`/post/${id}`);
+      setId(jsonRes.data.id);
+      localStorage.setItem('userId', userId);
+      navigate(`/post/${id}`);
     });
   };
 
@@ -169,10 +170,10 @@ const Write = () => {
       </TitleForm>
       <InfoForm>
         <SelectCategory value={category} onChange={onChangeCategory}>
-          {options.map((option) => {
+          {categories.map((category) => {
             return (
-              <option key={option.value} value={option.value}>
-                {option.name}
+              <option key={category.value} value={category.value}>
+                {category.name}
               </option>
             );
           })}
