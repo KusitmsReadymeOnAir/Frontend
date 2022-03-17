@@ -10,6 +10,7 @@ import {
   BsHeartFill,
 } from 'react-icons/bs';
 const currentUser = localStorage.getItem('userId')
+
 interface category{
     category:string,
 }
