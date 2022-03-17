@@ -4,9 +4,8 @@ import React, { useEffect, useState } from 'react'
 import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
-import { currentUser } from '../Components/getCurrentUser';
 import { Link } from 'react-router-dom';
-
+const currentUser = localStorage.getItem('userId')
 export const LoginComplete = () => {
     const [cookies, setCookie]=useCookies();
         if (cookies.user){
