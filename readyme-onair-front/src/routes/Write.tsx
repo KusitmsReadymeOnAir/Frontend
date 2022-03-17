@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import Editor from '../Components/Editor';
-import { currentUser } from '../Components/getCurrentUser';
 const API_URL = 'http://localhost:8080';
+const currentUser = localStorage.getItem('userId')
 
 export const categories = [
   {
@@ -99,7 +99,7 @@ const Write = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
-  const [imageId, setImgId] = useState('첨부파일');
+  const [imageId, setImgId] = useState('');
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
