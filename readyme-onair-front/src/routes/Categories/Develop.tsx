@@ -4,7 +4,7 @@ import PostsForm from '../PostsForm';
 
 const Devlop = () => {
   return (
-    <PostsForm category="개발"></PostsForm>
+    <PostsForm category="develop"></PostsForm>
   );
 };
 

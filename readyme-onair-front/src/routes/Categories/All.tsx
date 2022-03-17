@@ -10,7 +10,7 @@ import {
   BsHeart,
   BsHeartFill,
 } from 'react-icons/bs';
-const currentUser = localStorage.getItem('userId')
+const currentUser = localStorage.getItem('userId');
 
 interface search{
   searchText:string;
@@ -69,21 +69,38 @@ const All=({searchText, searchOption}: search)=>{
       //추천수 1 증가시키기
 
     };
+    const Categories=(category: any)=>{
+      switch(category){
+        case "design": return "디자인"
+        case "develop": return "개발"
+        case "pd": return "기획"
+        case "teambuilding": return "프로젝트모집"
+        case "daily": return "일상"
+    }};
+
     return(<>
     <PostsContainer>
     {posts && posts.map((item)=>{
           return (
               <Card onClick={onClickCard}>
                 {isLogin?
-                <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
-                <CardImg src="../imgs/Image.png"></CardImg>
-              </Link>
-              :
-              <CardImg src="../imgs/Image.png"></CardImg>
+                  <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
+                    {item.imageId ?
+                      <CardImg src={item.imageId}></CardImg>
+                      :<CardImg src="../imgs/Image.png"></CardImg>
+                    }
+                  </Link>
+                :
+                <>
+                {item.imageId ?
+                  <CardImg src={item.imageId}></CardImg>
+                  :<CardImg src="../imgs/Image.png"></CardImg>
+                }
+                </>
               } 
               <CardTitle>
                   <WriterImg src="../imgs/User.png"></WriterImg>
-                  <Writer>{item.writer}</Writer>
+                  <Writer>{item.userId.name}</Writer>
                   {/*좋아요, 스크랩 버튼 하나씩만 눌리게 하는 건 api 나오면 하겠음. 어떤 형태로 서버에 줘야할 지 모르겠어서*/}
                   <LikeBtns>
                     <ScrapBtn onClick={onClickScrap}>
@@ -100,7 +117,7 @@ const All=({searchText, searchOption}: search)=>{
                 </CardTitle>
                 <Title>{item.title}</Title>
                 <Foot>
-                  <Category>{item.category}</Category>
+                  <Category>{Categories(item.category)}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
@@ -167,6 +184,7 @@ const LikeBtns = styled.div`
 `;
 const CardImg=styled.img`
   width: 300px;
+  height:300px
 `
 const Title=styled.div`
   margin-top: 10px;

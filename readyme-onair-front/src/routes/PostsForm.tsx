@@ -47,22 +47,40 @@ const PostsForm = (category: category) => {
       //추천수 1 증가시키기
 
     };
-    
+    const Categories=(category: any)=>{
+      switch(category){
+        case "design": return "디자인"
+        case "develop": return "개발"
+        case "pd": return "기획"
+        case "teambuilding": return "프로젝트모집"
+        case "daily": return "일상"
+      }
+      
+    }
     return (<>
     <PostsContainer>
     {posts && posts.map((item)=>{
+     
           return (
               <Card onClick={onClickCard}>
                 {isLogin?
-                <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
-                <CardImg src="../imgs/Image.png"></CardImg>
-              </Link>
-              :
-              <CardImg src="../imgs/Image.png"></CardImg>
+                  <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
+                    {item.imageId ?
+                      <CardImg src={item.imageId}></CardImg>
+                      :<CardImg src="../imgs/Image.png"></CardImg>
+                    }
+                  </Link>
+                :
+                <>
+                {item.imageId ?
+                  <CardImg src={item.imageId}></CardImg>
+                  :<CardImg src="../imgs/Image.png"></CardImg>
+                }
+                </>
               } 
               <CardTitle>
                   <WriterImg src="../imgs/User.png"></WriterImg>
-                  <Writer>{item.writer}</Writer>
+                  <Writer>{item.userId.name}</Writer>
                   {/*좋아요, 스크랩 버튼 하나씩만 눌리게 하는 건 api 나오면 하겠음. 어떤 형태로 서버에 줘야할 지 모르겠어서*/}
                   <LikeBtns>
                     <ScrapBtn onClick={onClickScrap}>
@@ -78,6 +96,8 @@ const PostsForm = (category: category) => {
                   </LikeBtns>
                 </CardTitle>
                 <Title>{item.title}</Title>
+                <Foot>
+                  <Category>{Categories(item.category)}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
@@ -86,6 +106,8 @@ const PostsForm = (category: category) => {
                       String(item.date).substr(11, 12).split(":")[1]}
                   </span>
                 </Date>
+                </Foot>
+                
               </Card>  
         )})}
         <WarnModal
@@ -142,6 +164,7 @@ const LikeBtns = styled.div`
 `;
 const CardImg=styled.img`
   width: 300px;
+  height:300px
 `
 const Title=styled.div`
   margin-top: 10px;
@@ -149,12 +172,7 @@ const Title=styled.div`
   margin-left: 35px;
   font-size: 32px;
   font-weight: bold;
-`
-const Date=styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
+  height: 107px;
 `
 const ScrapBtn = styled.div`
   margin-left: 20px;
@@ -163,5 +181,17 @@ const ScrapBtn = styled.div`
 const LikeBtn = styled(ScrapBtn)`
   margin-right: 20px;
 `;
-
+const Foot=styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+`
+const Category=styled.div`
+`
+const Date=styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+`
 export default PostsForm;

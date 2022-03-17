@@ -4,7 +4,7 @@ import PostsForm from "../PostsForm";
 const Daily = () => {
   console.log("daily")
   return(
-    <PostsForm category="일상"></PostsForm>
+    <PostsForm category="daily"></PostsForm>
   );
 }
 export default Daily;

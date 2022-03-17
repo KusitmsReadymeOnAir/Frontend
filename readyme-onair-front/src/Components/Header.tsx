@@ -1,17 +1,35 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-const currentUser = localStorage.getItem('userId')
-
+const currentUser = localStorage.getItem('userId');
+let prePath="";
 const Header = () => {
+    
+    let location = useLocation();
     const [user, setUser]=useState<any[]>([{}]);
     const id=localStorage.getItem("userId");
     useEffect(()=>{
-        axios.get(`http://localhost:8080/mypage/user/${id}`)
-        .then((res)=>{;
-        setUser(res.data.userData);});
-    },[]);
+       
+        console.log(location)
+       if (prePath.indexOf('/login')!==-1){
+           console.log("refresh")
+           window.location.reload();
+       }
+        
+        prePath=location.pathname;    
+    },[location])
+
+    useEffect(()=>{
+       
+        if(currentUser){
+            axios.get(`http://localhost:8080/mypage/user/${id}`)
+            .then((res)=>{
+            setUser(res.data.userData);});
+    }
+    
+    },[])
+   
     return (
         <HeaderStyle>
             <Link to="/">
