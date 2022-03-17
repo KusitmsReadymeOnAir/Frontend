@@ -80,7 +80,7 @@ interface IComment {
 interface INewComment {
   comment: string;
   boardId: string;
-  parendComment?: string;
+  parentComment?: string;
   userId: string | null;
 }
 
@@ -95,6 +95,12 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
   const [isRepOpen, setIsRepOpen] = useState(false);
   const toggleRep = () => {
     setIsRepOpen(!isRepOpen);
+    if(isRepOpen === false){
+      window.scrollTo({
+        top: 100000,
+        behavior: 'smooth'
+      })
+    }
   };
 
   // 사용자 정보 불러오기
@@ -108,20 +114,13 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
     });
   }, [comments]);
 
-  const onClickRepBtn = (writer: string) => {
-    // 대댓글 등록
-    if (currentUser !== null) {
-    }
-  };
-
   // 댓글 값 변경
-  const onChangeNewComment = (value: string, isChild: boolean) => {
-    if(isChild){
-      setNewChildComment(value)
-    }else{
-      setNewComment(value);
-    }
+  const onChangeNewComment = (value: string) => {
+    setNewComment(value)
   };
+  const onChangeNewChildComment = (value: string) => {
+    setNewChildComment(value)
+  }
 
   // 새 댓글 등록
   const onClickNewComment = () => {
@@ -140,14 +139,13 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
       }).then(async (res) => {
         const json = await res.json();
         console.log(json)
-        // 등록 반영된 댓글 데이터 다시 가져와서 렌더링
-        fetch(`${API_URL}/board/show/` + id, {
-          method: 'GET',
-        }).then(async (res) => {
-          const jsonRes = await res.json();
-          console.log(jsonRes)
-          setComments(jsonRes.comment);
-        });
+      });
+      // 등록 반영된 댓글 데이터 다시 가져와서 렌더링
+      fetch(`${API_URL}/board/show/` + id, {
+        method: 'GET',
+      }).then(async (res) => {
+        const jsonRes = await res.json();
+        setComments(jsonRes.comment);
       });
     } else {
       setModalMessge('로그인이 필요합니다.')
@@ -180,13 +178,46 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
     }
   };
 
+  // 대댓글 등록
+  const onClickNewChildComment = (parentId: string) => {
+    const postData: INewComment = {
+      comment: newChildComment,
+      boardId: id,
+      parentComment: parentId,
+      userId: currentUser,
+    };
+    if (currentUser !== null) {
+      fetch(`${API_URL}/comment/addComment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      }).then(async (res) => {
+        const json = await res.json();
+        setIsRepOpen(false)
+        setIsMenuOpen(false)
+      });
+      // 등록 반영된 댓글 데이터 다시 가져와서 렌더링
+      fetch(`${API_URL}/board/show/` + id, {
+        method: 'GET',
+      }).then(async (res) => {
+        const jsonRes = await res.json();
+        setComments(jsonRes.comment);
+      });
+    } else {
+      setModalMessge('로그인이 필요합니다.')
+      setModalShow(!modalShow);
+    }
+  }
+
   return (
     <CommentContainer>
       <h2>댓글</h2>
       {comments?.map((comment: IComment) => {
         return (
-          <CommentContainer>
-          <Comment key={comment.userId._id}>
+          <CommentContainer key={comment._id}>
+          <Comment >
             <Menu>
               <BsThreeDotsVertical
                 onClick={toggleMenu}
@@ -209,21 +240,26 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
             <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
           </Comment>
           {comment?.childComments?.map((childComment: IComment) => {
-            <CommentContainer>
-            <Comment>
-                <CommentId>{childComment.userId.name}</CommentId>
-                <CommentContent>{childComment.comment}</CommentContent>
-            <DateTxt>작성날짜: {childComment.createdAt.toString().substring(0, 10)}</DateTxt>
-              </Comment>
-            </CommentContainer>
+            return(
+              <CommentContainer key={childComment._id}
+              style={{
+                marginBottom: 0
+              }}>
+              <Comment>
+                  <CommentId>ㄴ {childComment.userId.name}</CommentId>
+                  <CommentContent>{childComment.comment}</CommentContent>
+              <DateTxt>작성날짜: {childComment.createdAt.toString().substring(0, 10)}</DateTxt>
+                </Comment> 
+              </CommentContainer>
+            )
           })}
           <Comment style={{ display: isRepOpen ? 'block' : 'none' }}>
               <CommentId>✍️ 답글 작성</CommentId>
         <EditTextarea
           id="comment"
           placeholder="답글을 입력하세요"
-          value={newComment}
-          onChange={(value) => onChangeNewComment(value, false)}
+          value={newChildComment}
+          onChange={(value) => onChangeNewChildComment(value)}
           rows={2}
           style={{
             marginBottom: '10px',
@@ -232,7 +268,7 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
             resize: 'none',
           }}
         />
-        <SaveBtn onClick={onClickNewComment}>답글 등록</SaveBtn>
+        <SaveBtn onClick={() => onClickNewChildComment(comment._id)}>답글 등록</SaveBtn>
             </Comment>
           </CommentContainer>
         );
@@ -242,8 +278,8 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         <EditTextarea
           id="comment"
           placeholder="내용을 입력하세요"
-          value={newChildComment}
-          onChange={(value) => onChangeNewComment(value, true)}
+          value={newComment}
+          onChange={(value) => onChangeNewComment(value)}
           rows={2}
           style={{
             marginBottom: '10px',

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Write from "../Write";
-import { currentUser } from '../../Components/getCurrentUser';
 import WarnModal from '../../Components/WarnModal';
 import {
   BsBookmark,
@@ -11,6 +10,7 @@ import {
   BsHeart,
   BsHeartFill,
 } from 'react-icons/bs';
+const currentUser = localStorage.getItem('userId')
 
 interface search{
   searchText:string;
