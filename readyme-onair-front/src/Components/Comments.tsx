@@ -87,6 +87,7 @@ interface INewComment {
 const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
   const [comments, setComments] = useState<IComment[]>();
   const [newComment, setNewComment] = useState(''); // 새로 등록할 댓글
+  const [newChildComment, setNewChildComment] = useState('')  // 새로 등록할 답글
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -114,8 +115,12 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
   };
 
   // 댓글 값 변경
-  const onChangeNewComment = (value: string) => {
-    setNewComment(value);
+  const onChangeNewComment = (value: string, isChild: boolean) => {
+    if(isChild){
+      setNewChildComment(value)
+    }else{
+      setNewComment(value);
+    }
   };
 
   // 새 댓글 등록
@@ -203,10 +208,31 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
             <CommentContent>{comment.comment}</CommentContent>
             <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
           </Comment>
-
+          {comment?.childComments?.map((childComment: IComment) => {
+            <CommentContainer>
+            <Comment>
+                <CommentId>{childComment.userId.name}</CommentId>
+                <CommentContent>{childComment.comment}</CommentContent>
+            <DateTxt>작성날짜: {childComment.createdAt.toString().substring(0, 10)}</DateTxt>
+              </Comment>
+            </CommentContainer>
+          })}
           <Comment style={{ display: isRepOpen ? 'block' : 'none' }}>
-              <CommentId>답글 작성</CommentId>
-              <CommentContent>대댓글</CommentContent>
+              <CommentId>✍️ 답글 작성</CommentId>
+        <EditTextarea
+          id="comment"
+          placeholder="답글을 입력하세요"
+          value={newComment}
+          onChange={(value) => onChangeNewComment(value, false)}
+          rows={2}
+          style={{
+            marginBottom: '10px',
+            width: '100%',
+            height: '70px',
+            resize: 'none',
+          }}
+        />
+        <SaveBtn onClick={onClickNewComment}>답글 등록</SaveBtn>
             </Comment>
           </CommentContainer>
         );
@@ -216,8 +242,8 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         <EditTextarea
           id="comment"
           placeholder="내용을 입력하세요"
-          value={newComment}
-          onChange={(value) => onChangeNewComment(value)}
+          value={newChildComment}
+          onChange={(value) => onChangeNewComment(value, true)}
           rows={2}
           style={{
             marginBottom: '10px',

@@ -99,7 +99,7 @@ const Write = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
-  const [imageId, setImgId] = useState('첨부파일');
+  const [imageId, setImgId] = useState('');
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
