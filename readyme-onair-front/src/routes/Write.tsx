@@ -97,7 +97,6 @@ interface IPost {
 const Write = () => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
-  const [writer, setWriter] = useState('작성자'); // userId로 수정, Localstorage에서 받아올 것
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
   const [imageId, setImgId] = useState('첨부파일');
@@ -120,10 +119,14 @@ const Write = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       console.log('응답 : ', jsonRes);
-      setId(jsonRes.data.id);
-      localStorage.setItem('userId', userId);
-      navigate(`/post/${id}`);
-    });
+      setId(jsonRes.data._id)
+    })
+    fetch(`${API_URL}/board/show/` + id, {
+      method:'GET'
+    }).then(async(res) => {
+      const jsonRes = await res.json();
+      navigate(`/post/${id}`)
+    })
   };
 
   const onChangeTitle = (value: string) => {
