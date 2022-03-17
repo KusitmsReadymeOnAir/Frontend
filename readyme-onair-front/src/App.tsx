@@ -9,7 +9,7 @@ const App: React.FC = () => {
     <>
     <BrowserRouter>
     <ModalProvider>
-        <Header />
+    <Header></Header>
         <Router />
       </ModalProvider>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { Cookies, useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { setSourceMapRange } from 'typescript';
@@ -14,7 +15,16 @@ const MyPage = () => {
     const [posts, setPosts]=useState<any[]>([]);
     const [user, setUser]=useState<any[]>([{}]);
     const id=localStorage.getItem("userId");
-
+    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const Logout=()=>{
+        axios.get("http://localhost:8080/auth/logout")
+        .then((res)=>{console.log(res.status);
+            localStorage.removeItem("userId");
+            removeCookie("user");
+            window.location.replace("/")
+        }
+        )
+    }
     useEffect(()=>{
         axios.get(`http://localhost:8080/mypage/user/${id}`)
         .then((res)=>{console.log(res.data.userData);
@@ -99,6 +109,7 @@ const MyPage = () => {
     },[category])
     return (
    <Container>
+       <button onClick={Logout}>로그아웃</button>
        <User>
            <UserImg src='../imgs/Image.png'></UserImg>
            <Profile>

@@ -7,21 +7,16 @@ import { useCookies } from 'react-cookie';
 import { currentUser } from '../Components/getCurrentUser';
 import { Link } from 'react-router-dom';
 
-export const Login = () => {
+export const LoginComplete = () => {
     const [cookies, setCookie]=useCookies();
         if (cookies.user){
             localStorage.setItem("userId", cookies.user);
             console.log(currentUser);
         }
-    const Login=()=>{
-    window.location.href="http://localhost:8080/auth/login"
-   }
-   
     return (
         <div>
         <Container>
-            {currentUser
-            ?
+           
             <>
          <Notice>
         로그인 <br/>되었습니다.
@@ -31,16 +26,8 @@ export const Login = () => {
         </Link>
         
         </> 
-        :<>
-         <Notice>
-        로그인 후 <br/> 이용 가능합니다.
-        </Notice>
-         <LoginBtn onClick={Login}>로그인하기</LoginBtn>
-        </> 
-        }
-           
         </Container>
-        </div>
+       </div>
     )
 }
 const Container = styled.div`
@@ -66,3 +53,4 @@ const LoginBtn=styled.button`
     box-shadow: 4px 4px 0px #000000;
     border-radius: 12px;
 `
+export default LoginComplete;

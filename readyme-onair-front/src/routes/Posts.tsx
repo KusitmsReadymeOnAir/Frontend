@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Design from './Categories/Design';
 import All from './Categories/All';
@@ -7,13 +7,16 @@ import PD from './Categories/PD';
 import TeamBuild from './Categories/TeamBuild';
 import Daily from './Categories/Daily';
 import { useCookies } from 'react-cookie';
-
+import Header from '../Components/Header';
+import { useLocation } from 'react-router-dom';
+let prePath="";
 // 게시글 리스트 페이지
 const Posts = () => {
+ 
   const [cookies, setCookie]=useCookies();
-  if (cookies.user){
-    localStorage.setItem("userId", cookies.user);
-  }
+  
+
+
   //각 버튼들 클릭 유무를 배열로 관리해서 하나 클릭하면 그 전에 클릭했던거 색 없어지도록 하기
   //[디자인, 개발, 기획, 프로젝트모집, 일상]
   const [click, setClick]=useState<boolean[]>([false, false, false, false, false])
@@ -21,7 +24,6 @@ const Posts = () => {
   const [searchOption, setSearchOption]=useState<string>("");
   const [category, setCategory]=useState<string>("");
   const categoryPost=()=>{
-   
     switch(category){
       case "":
         return (<All searchText={searchText} searchOption={searchOption}></All>);
@@ -38,6 +40,7 @@ const Posts = () => {
     }
   }
   return (
+   
     <>
     <Container>
       <SearchContainer>
