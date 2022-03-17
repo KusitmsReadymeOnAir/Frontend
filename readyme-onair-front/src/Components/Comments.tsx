@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
-import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { DateTxt } from '../routes/Post';
 const API_URL = 'http://localhost:8080';
+const currentUser = localStorage.getItem('userId')
 
 // styled components
 const CommentContainer = styled.div`
