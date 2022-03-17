@@ -8,7 +8,7 @@ const editorConfig = {
   },
 };
 
-const Editor = ({ onChangeContent, setImgId }) => {
+const Editor = ({ onChangeContent }) => {
   const onChange = (event, editor) => {
     onChangeContent(editor.getData());
   };

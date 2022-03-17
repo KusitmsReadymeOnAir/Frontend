@@ -1,9 +1,17 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { currentUser } from './getCurrentUser';
 
 const Header = () => {
+    const [user, setUser]=useState<any[]>([{}]);
+    const id=localStorage.getItem("userId");
+    useEffect(()=>{
+        axios.get(`http://localhost:8080/mypage/user/${id}`)
+        .then((res)=>{;
+        setUser(res.data.userData);});
+    },[]);
     return (
         <HeaderStyle>
             <Link to="/">
@@ -12,14 +20,24 @@ const Header = () => {
                     <LogoText>레디미 온에어</LogoText>   
                 </HeaderLeft>
             </Link>
-               
-            <HeaderRight>
-               <Link to="/write">
-               <HeaderBtn>새 글 작성</HeaderBtn>
-               </Link>
-                
+            {
+                currentUser
+                ?
+                <HeaderRight>
+                    <Link to="/write">
+                    <HeaderBtn>새 글 작성</HeaderBtn>
+                    </Link>
+                    <Link to="/mypage"  style={{ textDecoration: "none", color:"black"}}>
+                    <User>
+                    <UserImg src="../imgs/User.png"></UserImg>
+                    <UserName>{user[0].name}</UserName>
+                    </User> 
+                    </Link>
+                </HeaderRight>
+                :
+                <div></div>
+            }
             
-            </HeaderRight>
         </HeaderStyle>
     );
 };
@@ -49,7 +67,9 @@ const LogoText=styled.div`
 `
 const HeaderRight=styled.span`
     float:right ;
-    margin-top: 40px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
 `
 const HeaderBtn=styled.button`
     width: 176px;
@@ -62,5 +82,16 @@ const HeaderBtn=styled.button`
     margin-right:38px ;
     font-style: normal;
     font-size: 20px;
+    margin-top: 20px;
+`
+const User=styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const UserImg=styled.img`
+    margin-bottom: 10px;
+`
+const UserName=styled.div`
+    text-align: center;
 `
 export default Header;

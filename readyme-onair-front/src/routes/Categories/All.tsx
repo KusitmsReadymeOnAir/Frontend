@@ -99,6 +99,8 @@ const All=({searchText, searchOption}: search)=>{
                   </LikeBtns>
                 </CardTitle>
                 <Title>{item.title}</Title>
+                <Foot>
+                  <Category>{item.category}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
                   <span>
@@ -107,6 +109,8 @@ const All=({searchText, searchOption}: search)=>{
                       String(item.date).substr(11, 12).split(":")[1]}
                   </span>
                 </Date>
+                </Foot>
+                
               </Card>  
         )})}
         <WarnModal
@@ -170,6 +174,15 @@ const Title=styled.div`
   margin-left: 35px;
   font-size: 32px;
   font-weight: bold;
+  height: 107px;
+
+`
+const Foot=styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+`
+const Category=styled.div`
 `
 const Date=styled.div`
   position: absolute;
