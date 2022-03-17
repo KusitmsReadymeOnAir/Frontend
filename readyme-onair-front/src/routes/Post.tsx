@@ -15,7 +15,6 @@ import { categories, SelectCategory, SubmitBtn, SubmitContainer } from './Write'
 import e from 'cors';
 import Editor from '../Components/Editor';
 const API_URL = 'http://localhost:8080';
-const currentUser = localStorage.getItem('userId')
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -51,11 +50,11 @@ const EditBtn = styled(CategoryName)`
   color: #2152f4;
   background: #fff;
   border-color: #2152f4;
-  /*&: hover {
+  &: hover {
     color: #fff;
     background: #2152f4;
   }
-  cursor: pointer;*/
+  cursor: pointer;
 `;
 const DelBtn = styled(EditBtn)``;
 const PostBox = styled.div`
@@ -123,6 +122,7 @@ const Post = () => {
   const [editTitle, setEditTitle] = useState(post?.title);
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
+  const [pagePosition, setPagePosition] = useState(0)
 
   useEffect(() => {
     fetch(`${API_URL}/board/show/` + id, {
@@ -135,21 +135,30 @@ const Post = () => {
 
   // 게시물 수정
   const onClickEditBtn = () => {
+    setEditTitle(post?.title)
+    setEditContent(post?.content)
+    setEditCategory(post?.category)
     // 게시물 작성자와 현재 사용자가 다른 경우
     if (post?.userId._id !== currentUser) {
       setModalMessge('자신이 작성한 글만 수정할 수 있습니다.');
       setModalShow(!modalShow)
     } else {
+      // 게시물 수정 창으로 이동
       setIsEdit(true);
+      window.scrollTo({
+        top: 800,
+        behavior: 'smooth'
+      })
     }
   };
   const onClickUpdate = () => {
     const editData = {
+      boardId: id,
+      userId: currentUser,
       title: editTitle,
       content: editContent,
       category: editCategory,
     };
-    console.log(editData);
     fetch(`${API_URL}/board/update`, {
       method: 'POST',
       headers: {
@@ -159,6 +168,14 @@ const Post = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       console.log(jsonRes)
+      setIsEdit(false)
+    });
+    // 게시물 다시 가져와서 렌더링
+    fetch(`${API_URL}/board/show/` + id, {
+      method: 'GET',
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      setPost(jsonRes.board[0]);
     });
   }
 
@@ -170,7 +187,6 @@ const Post = () => {
       setModalShow(!modalShow)
     } else {
       const delData = { boardId:id, userId: user };
-      // 401 unauthorized Error
       fetch(`${API_URL}/board/delete`, {
         method: 'DELETE',
         headers: {
