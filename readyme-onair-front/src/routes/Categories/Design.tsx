@@ -4,7 +4,7 @@ import PostsForm from '../PostsForm';
 
 const Design = () => {
   return(
-    <PostsForm category="디자인"></PostsForm>
+    <PostsForm category="design"></PostsForm>
   );
   }
 export default Design;

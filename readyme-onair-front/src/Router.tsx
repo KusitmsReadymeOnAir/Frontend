@@ -10,6 +10,7 @@ import Daily from './routes/Categories/Daily';
 import Write from './routes/Write';
 import { Login } from './routes/Login';
 import MyPage from './routes/MyPage';
+import LoginComplete from './routes/LoginComplete';
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
         <Route path={'/post/:id'} element={<Post />} />
         <Route path={'/post'} element={<Post />} />
         <Route path={'/login'} element={<Login/>}></Route>
+        <Route path={'/logincomplete'} element={<LoginComplete/>}></Route>
         <Route path={'/mypage'} element={<MyPage></MyPage>}></Route>
       </Routes>
     //</BrowserRouter>
