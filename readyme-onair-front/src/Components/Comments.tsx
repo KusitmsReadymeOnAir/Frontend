@@ -3,6 +3,7 @@ import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
 import { currentUser } from './getCurrentUser';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { DateTxt } from '../routes/Post';
 const API_URL = 'http://localhost:8080';
 
 // styled components
@@ -179,6 +180,7 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
       <h2>댓글</h2>
       {comments?.map((comment: IComment) => {
         return (
+          <CommentContainer>
           <Comment key={comment.userId._id}>
             <Menu>
               <BsThreeDotsVertical
@@ -199,11 +201,14 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
             </Menu>
             <CommentId>{comment?.userId.name}</CommentId>
             <CommentContent>{comment.comment}</CommentContent>
-            <Comment style={{ visibility: isRepOpen ? 'visible' : 'hidden' }}>
-              <CommentId>대댓글 작성자</CommentId>
+            <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
+          </Comment>
+
+          <Comment style={{ display: isRepOpen ? 'block' : 'none' }}>
+              <CommentId>답글 작성</CommentId>
               <CommentContent>대댓글</CommentContent>
             </Comment>
-          </Comment>
+          </CommentContainer>
         );
       })}
       <h2>댓글 작성</h2>

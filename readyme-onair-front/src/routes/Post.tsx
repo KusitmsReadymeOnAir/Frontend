@@ -93,6 +93,11 @@ const EditContainer = styled(PostBox)`
   height: 350px;
   margin-top: 20px;
 `;
+export const DateTxt = styled.p`
+  opacity: 0.3;
+  font-size: 12px;
+  margin-left: 10px;
+`
 
 interface IPost {
   _id: string
@@ -124,6 +129,7 @@ const Post = () => {
   const [editContent, setEditContent] = useState(post?.content);
   const [pagePosition, setPagePosition] = useState(0)
 
+  // 게시물 불러오기
   useEffect(() => {
     fetch(`${API_URL}/board/show/` + id, {
       method: 'GET',
@@ -229,6 +235,7 @@ const Post = () => {
         <h1>{post?.title}</h1>
         <PostBox>
           <PostBtns>
+            <DateTxt>작성날짜: {post?.date.toString().substring(0, 10)}</DateTxt>
             <EditBtn onClick={onClickEditBtn}>수정</EditBtn>
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
           </PostBtns>
