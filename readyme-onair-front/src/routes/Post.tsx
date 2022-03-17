@@ -111,7 +111,7 @@ interface IEditPost {
 }
 
 const Post = () => {
-  const currentUser = '62309fdd61e3bfc788d62c8d'; // localStorage 오류 발생
+  const currentUser = localStorage.getItem('userId')
   const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>();
   const [modalShow, setModalShow] = useState(false);
