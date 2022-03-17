@@ -20,7 +20,7 @@ const MyPage = () => {
         axios.get("http://localhost:8080/auth/logout")
         .then((res)=>{console.log(res.status);
             localStorage.removeItem("userId");
-            removeCookie("user");
+            //removeCookie("user");
             window.location.replace("/")
         }
         )
@@ -34,82 +34,21 @@ const MyPage = () => {
         if (category==="post"){
             axios.get(`http://localhost:8080/mypage/board/${id}`)
             .then((res)=>{//setPosts(res.data); 
-                setPosts( [{
-                    "commentData": [
-                        [
-                            {
-                                "_id": "6230bb88cb425869af244c20",
-                                "title": "내가 쓴 글",
-                                "content": "어쩌고",
-                                "category": "개발",
-                                "userId": {
-                                    "_id": "62309fdd61e3bfc788d62c8d",
-                                    "name": "전수현"
-                                },
-                                "date": "2022-03-15T16:15:04.030Z"
-                            }
-                        ]
-                    ],
-                    "commentCnt": [
-                        {
-                            "cnt": 2
-                        }
-                    ]
-                },
-                {
-                    "commentData": [
-                        [
-                            {
-                                "_id": "6230bb88cb425869af244c20",
-                                "title": "join test 글",
-                                "content": "어쩌고",
-                                "category": "개발",
-                                "userId": {
-                                    "_id": "62309fdd61e3bfc788d62c8d",
-                                    "name": "전수현"
-                                },
-                                "date": "2022-03-15T16:15:04.030Z"
-                            }
-                        ]
-                    ],
-                    "commentCnt": [
-                        {
-                            "cnt": 2
-                        }
-                    ]
-                }] )
+                setPosts( [])
                 console.log(res.data.boardData)});
         }
         else if (category==="comment"){
             axios.get(`http://localhost:8080/mypage/comment/${id}`)
             .then((res)=>{//setPosts(res.data); 
-                setPosts([ {
-                    "commentData": [
-                        [
-                            {
-                                "_id": "6230bb88cb425869af244c20",
-                                "title": "댓글 단 글",
-                                "content": "어쩌고",
-                                "category": "개발",
-                                "userId": {
-                                    "_id": "62309fdd61e3bfc788d62c8d",
-                                    "name": "전수현"
-                                },
-                                "date": "2022-03-15T16:15:04.030Z"
-                            }
-                        ]
-                    ],
-                    "commentCnt": [
-                        {
-                            "cnt": 2
-                        }
-                    ]
-                }])
+                setPosts([])
                 console.log(res.data.commentData)})} 
     },[category])
     return (
    <Container>
-       <button onClick={Logout}>로그아웃</button>
+       <LogBtn>
+       <LogoutBtn onClick={Logout}>로그아웃</LogoutBtn>
+       </LogBtn>
+       
        <User>
            <UserImg src='../imgs/Image.png'></UserImg>
            <Profile>
@@ -131,7 +70,7 @@ const MyPage = () => {
         
        </Menu>
        <List>
-        {posts&& posts.map((item)=>{
+        {posts && posts.map((item)=>{
             console.log(item);
             console.log(item.commentCnt[0].cnt);
             
@@ -181,6 +120,20 @@ const UserImg=styled.img`
     height: 169px;
     border: 4px solid #000000;
     border-radius: 6px;
+`
+const LogBtn=styled.div`
+display: flex;
+justify-content: flex-end;
+`
+const LogoutBtn=styled.button`
+    height: 50px;
+    font-size: 20px;
+    padding: 12px 24px;
+    background: #fff;
+    border: 4px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 12px;
+    width: 130px;
 `
 const Profile=styled.div`
     display: flex;
