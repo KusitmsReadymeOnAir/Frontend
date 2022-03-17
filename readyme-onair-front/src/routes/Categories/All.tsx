@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Write from "../Write";
-import { currentUser } from '../../Components/getCurrentUser';
 import WarnModal from '../../Components/WarnModal';
 import {
   BsBookmark,
@@ -11,7 +10,7 @@ import {
   BsHeart,
   BsHeartFill,
 } from 'react-icons/bs';
-
+const currentUser = localStorage.getItem('userId');
 interface search{
   searchText:string;
   searchOption:string;
@@ -84,11 +83,19 @@ const All=({searchText, searchOption}: search)=>{
           return (
               <Card onClick={onClickCard}>
                 {isLogin?
-                <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
-                <CardImg src="../imgs/Image.png"></CardImg>
-              </Link>
-              :
-              <CardImg src="../imgs/Image.png"></CardImg>
+                  <Link to={`/post/${item._id}`} style={{ textDecoration: "none" }}>
+                    {item.imageId ?
+                      <CardImg src={item.imageId}></CardImg>
+                      :<CardImg src="../imgs/Image.png"></CardImg>
+                    }
+                  </Link>
+                :
+                <>
+                {item.imageId ?
+                  <CardImg src={item.imageId}></CardImg>
+                  :<CardImg src="../imgs/Image.png"></CardImg>
+                }
+                </>
               } 
               <CardTitle>
                   <WriterImg src="../imgs/User.png"></WriterImg>
@@ -176,6 +183,7 @@ const LikeBtns = styled.div`
 `;
 const CardImg=styled.img`
   width: 300px;
+  height:300px
 `
 const Title=styled.div`
   margin-top: 10px;
