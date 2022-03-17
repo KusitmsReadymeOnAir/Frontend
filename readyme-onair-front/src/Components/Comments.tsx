@@ -79,7 +79,7 @@ interface IComment {
 interface INewComment {
   comment: string;
   boardId: string;
-  parendComment?: string;
+  parentComment?: string;
   userId: string | null;
 }
 
@@ -132,13 +132,16 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         },
         body: JSON.stringify(postData),
       }).then(async (res) => {
-        const jsonRes = await res.json();
-        console.log(jsonRes.comment);
-        // 서버에서 수정된 결과 넘겨 받아야함
-        setComments(jsonRes.comment);
+        // 등록 반영된 댓글 데이터 다시 가져와서 렌더링
+        fetch(`${API_URL}/board/show/` + id, {
+          method: 'GET',
+        }).then(async (res) => {
+          const jsonRes = await res.json();
+          setComments(jsonRes.comment);
+        });
       });
     } else {
-      setModalMessge('로그인이 필요합니다.')
+      setModalMessge('로그인이 필요합니다.');
       setModalShow(!modalShow);
     }
   };
@@ -147,16 +150,16 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
     // local storage 오류 발생
     const currentUser = '62309fdd61e3bfc788d62c8d';
-    console.log(currentUser)
+    console.log(currentUser);
     if (userId === currentUser) {
-      const delData = { commentId, userId}
+      const delData = { commentId, userId };
       fetch(`${API_URL}/comment/deleteComment`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(delData),
-      })
+      });
       // 삭제 반영된 댓글 데이터 다시 가져와서 렌더링
       fetch(`${API_URL}/board/show/` + id, {
         method: 'GET',
@@ -165,8 +168,8 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         setComments(jsonRes.comment);
       });
     } else {
-      setModalMessge('자신이 쓴 댓글만 삭제할 수 있습니다.')
-      setModalShow(!modalShow)
+      setModalMessge('자신이 쓴 댓글만 삭제할 수 있습니다.');
+      setModalShow(!modalShow);
     }
   };
 
@@ -185,7 +188,11 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
               {isMenuOpen ? (
                 <ButtonContainer>
                   <Btn onClick={toggleRep}>답글 달기</Btn>
-                  <Btn onClick={() => onClickDelBtn(comment?._id, comment?.userId._id)}>
+                  <Btn
+                    onClick={() =>
+                      onClickDelBtn(comment?._id, comment?.userId._id)
+                    }
+                  >
                     삭제
                   </Btn>
                 </ButtonContainer>

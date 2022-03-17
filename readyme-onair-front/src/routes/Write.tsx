@@ -95,21 +95,18 @@ interface IPost {
 }
 
 const Write = () => {
-  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
-  const [writer, setWriter] = useState('작성자'); // userId로 수정, Localstorage에서 받아올 것
   const [category, setCategory] = useState('design');
   const [content, setContent] = useState('');
   const [imageId, setImgId] = useState('첨부파일');
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
-  const userId :any= currentUser;
+  const userId: any = currentUser;
   const postData: IPost = { title, content, category, userId, imageId };
 
   const onUpload = (e: any) => {
     console.log(postData);
-    console.log(imageId);
     e.preventDefault();
     fetch(`${API_URL}/board/write`, {
       method: 'POST',
@@ -120,9 +117,7 @@ const Write = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       console.log('응답 : ', jsonRes);
-      setId(jsonRes.data.id);
-      localStorage.setItem('userId', userId);
-      navigate(`/post/${id}`);
+      navigate(`/post/${jsonRes.data._id}`);
     });
   };
 
@@ -186,9 +181,7 @@ const Write = () => {
         </form>
         <img src={imageId} alt="" />
         <SubmitContainer>
-          <Link to={`/post/${id}`}>
-            <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
-          </Link>
+          <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
         </SubmitContainer>
       </ContentContainer>
     </Container>
