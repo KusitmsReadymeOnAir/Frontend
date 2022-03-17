@@ -67,12 +67,12 @@ export const UserInfoForm = styled.form`
 const ContentContainer = styled.div`
   height: 400px;
 `;
-const SubmitContainer = styled.div`
+export const SubmitContainer = styled.div`
   display: flex;
   justify-content: right;
   align-items: center;
 `;
-const SubmitBtn = styled.button`
+export const SubmitBtn = styled.button`
   width: 120px;
   height: 43px;
   background: #2152f4;
@@ -180,7 +180,7 @@ const Write = () => {
         </SelectCategory>
       </InfoForm>
       <ContentContainer>
-        <Editor onChangeContent={onChangeContent} setImgId={{ setImgId }} />
+        <Editor onChangeContent={onChangeContent} />
         <form method="post" encType="multipart/form-data">
           <input type="file" id="imgs" accept="img/*" onChange={onChangeImg} />
         </form>

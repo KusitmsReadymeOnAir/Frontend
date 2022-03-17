@@ -104,7 +104,7 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
       const jsonRes = await res.json();
       setComments(jsonRes.comment);
     });
-  }, []);
+  }, [comments]);
 
   const onClickRepBtn = (writer: string) => {
     // 대댓글 등록
@@ -132,10 +132,16 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
         },
         body: JSON.stringify(postData),
       }).then(async (res) => {
-        const jsonRes = await res.json();
-        console.log(jsonRes.comment);
-        // 서버에서 수정된 결과 넘겨 받아야함
-        setComments(jsonRes.comment);
+        const json = await res.json();
+        console.log(json)
+        // 등록 반영된 댓글 데이터 다시 가져와서 렌더링
+        fetch(`${API_URL}/board/show/` + id, {
+          method: 'GET',
+        }).then(async (res) => {
+          const jsonRes = await res.json();
+          console.log(jsonRes)
+          setComments(jsonRes.comment);
+        });
       });
     } else {
       setModalMessge('로그인이 필요합니다.')

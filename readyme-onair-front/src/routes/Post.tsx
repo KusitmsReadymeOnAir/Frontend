@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Comments from '../Components/Comments';
-import { currentUser } from '../Components/getCurrentUser';
 import WarnModal from '../Components/WarnModal';
 import {
   BsBookmark,
@@ -12,8 +11,11 @@ import {
 import { BiFemaleSign } from 'react-icons/bi';
 import { useLocation } from 'react-router-dom';
 import { EditText, EditTextarea } from 'react-edit-text';
-import { categories, SelectCategory } from './Write';
+import { categories, SelectCategory, SubmitBtn, SubmitContainer } from './Write';
+import e from 'cors';
+import Editor from '../Components/Editor';
 const API_URL = 'http://localhost:8080';
+const currentUser = localStorage.getItem('userId')
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -88,10 +90,10 @@ const LikeBtn = styled(ScrapBtn)`
   margin-right: 20px;
 `;
 const EditContainer = styled(PostBox)`
-width: 80%;
-height: 200px;
-margin-top: 20px
-`
+  width: 80%;
+  height: 350px;
+  margin-top: 20px;
+`;
 
 interface IPost {
   _id: string
@@ -118,7 +120,9 @@ const Post = () => {
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [editPost, setEditPost] = useState<IEditPost>()
+  const [editTitle, setEditTitle] = useState(post?.title);
+  const [editCategory, setEditCategory] = useState(post?.category);
+  const [editContent, setEditContent] = useState(post?.content);
 
   useEffect(() => {
     fetch(`${API_URL}/board/show/` + id, {
@@ -126,39 +130,46 @@ const Post = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       setPost(jsonRes.board[0]);
-      setEditPost({
-        editTitle: post!!.title,
-        editContent: post!!.content,
-        editCategory: post!!.category
-      })
     });
   }, []);
 
+  // 게시물 수정
   const onClickEditBtn = () => {
     // 게시물 작성자와 현재 사용자가 다른 경우
     if (post?.userId._id !== currentUser) {
-      // 401 unauthorized Error
       setModalMessge('자신이 작성한 글만 수정할 수 있습니다.');
       setModalShow(!modalShow)
     } else {
       setIsEdit(true);
-      const editData = {
-        title: editPost?.editTitle,
-        content: editPost?.editContent,
-        category: editPost?.editCategory
-      }
-      console.log(editData)
     }
   };
+  const onClickUpdate = () => {
+    const editData = {
+      title: editTitle,
+      content: editContent,
+      category: editCategory,
+    };
+    console.log(editData);
+    fetch(`${API_URL}/board/update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editData),
+    }).then(async (res) => {
+      const jsonRes = await res.json();
+      console.log(jsonRes)
+    });
+  }
 
+  // 게시물 삭제
   const onClickDelBtn = () => {
-    // 게시물 삭제
-    const userId = post?.userId._id
-    if(userId !== currentUser){
+    const user = post?.userId._id;
+    if (user !== currentUser) {
       setModalMessge('자신이 작성한 글만 삭제할 수 있습니다.');
       setModalShow(!modalShow)
     } else {
-      const delData = { id, userId}
+      const delData = { boardId:id, userId: user };
       // 401 unauthorized Error
       fetch(`${API_URL}/board/delete`, {
         method: 'DELETE',
@@ -166,24 +177,26 @@ const Post = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(delData),
+      }).then(async(res) => {
+        const successMsg = await res.json();
+        if(successMsg){
+          setModalMessge('게시글이 삭제되었습니다.')
+          setModalShow(!modalShow)
+        }
       })
-      // 수정된 게시물 리렌더링
-      fetch(`${API_URL}/board/show/` + id, {
-        method: 'GET',
-      }).then(async (res) => {
-        const jsonRes = await res.json();
-        setPost(jsonRes.board[0]);
-      });
     }
   }
 
   const onChangeEditCategory = (e: any) => {
-    // 여기서부터 수정
-    // setEditPost({
-    //   ...,
-    //   editCategory: e.target.value
-    // })
+    setEditCategory(e.currentTarget.value)
   }
+  const onChangeEditContent = (value: string) => {
+    setEditContent(value)
+  }
+  const onChangeEditTitle = (e: any) => {
+    setEditTitle(e.currentTarget.value)
+  }
+
   const onClickScrap = () => {
     setScrap(!scrap);
     console.log('스크랩');
@@ -206,7 +219,9 @@ const Post = () => {
           <ImageContainer>
             <img src={post?.imageId} alt="" />
           </ImageContainer>
-          <ContentContainer>{post?.content}</ContentContainer>
+          <ContentContainer>
+            {post?.content}
+          </ContentContainer>
         </PostBox>
       </PostContainer>
       <LikeBtns>
@@ -225,47 +240,53 @@ const Post = () => {
           )}
         </LikeBtn>
       </LikeBtns>
-      {
-        isEdit? ( 
-          <EditContainer>
-            <h3>수정할 사항 입력</h3>
-            <EditText
-              type="text"
-              value={editPost?.editTitle}
-              // onChange={(value:string) => setEditPost({
-              //   ...,
-              //   editTitle: value
-              // })}
-              style={{
-                width: '50%',
-                height: '20px',
-                fontSize: '20px'
-              }}/>
-              <SelectCategory value={editPost?.editCategory} onChange={onChangeEditCategory}>
-          {categories.map((category) => {
-            return (
-              <option key={category.value} value={category.value}>
-                {category.name}
-              </option>
-            );
-          })}
-        </SelectCategory>
-              <EditTextarea
-              value={editPost?.editContent}
-              // onChange={(value: string) => setEditPost({
-              //   ...,
-              //   editContent: value
-              // })}
-              style={{
-                width: '90%',
-                height: '150px'
-              }}
-              />
-          </EditContainer>) : (
-            <></>
-          )
-      }
-      <Comments id={id} modalShow={modalShow} setModalShow={setModalShow} setModalMessge={setModalMessge} />
+
+      {isEdit ? (
+        <EditContainer>
+          <h3>✍️ 수정할 사항 입력</h3>
+          <EditText
+            type="text"
+            placeholder={post?.title}
+            value={editTitle}
+            onChange={onChangeEditTitle}
+            style={{
+              width: '50%',
+              height: '20px',
+              fontSize: '30px',
+              marginBottom: '20px'
+            }}
+          />
+          <form>
+          <SelectCategory
+            value={editCategory}
+            onChange={onChangeEditCategory}
+            style={{
+              marginBottom: '20px'
+            }}
+          >
+            {categories.map((category) => {
+              return (
+                <option key={category.value} value={category.value}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </SelectCategory>
+          </form>
+          <Editor onChangeContent={onChangeEditContent}/>
+        <SubmitContainer>
+          <SubmitBtn onClick={onClickUpdate}>수정하기</SubmitBtn>
+        </SubmitContainer>
+        </EditContainer>
+      ) : (
+        <></>
+      )}
+      <Comments
+        id={id}
+        modalShow={modalShow}
+        setModalShow={setModalShow}
+        setModalMessge={setModalMessge}
+      />
       <WarnModal
         show={modalShow}
         message={
