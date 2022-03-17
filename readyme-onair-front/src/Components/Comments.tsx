@@ -151,8 +151,6 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
 
   const onClickDelBtn = (commentId: string, userId: string) => {
     // 로컬 스토리지의 사용자와 댓글 작성자가 일치하면 댓글 삭제
-    // local storage 오류 발생
-    const currentUser = '62309fdd61e3bfc788d62c8d';
     console.log(currentUser)
     if (userId === currentUser) {
       const delData = { commentId, userId}
