@@ -42,7 +42,18 @@ const Posts = () => {
     <Container>
       {category===""?
       <SearchContainer>
-      <SearchInput
+        <SearchOption>
+         <div>
+         <select onChange={(e) => setSearchOption(e.target.value)} style={{height:"35px"}}>
+            <option>검색 유형</option>
+            <option value="writer">작성자</option>
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="title_content">제목/내용</option>
+          </select>
+         </div>
+        </SearchOption>
+        <SearchInput
             onChange={
               (e)=>setSearchText(e.target.value)
             }
@@ -52,17 +63,6 @@ const Posts = () => {
             }}
             >
         </SearchInput> 
-        <SearchOption>
-         <div>
-         <select onChange={(e) => setSearchOption(e.target.value)}>
-            <option>검색 유형</option>
-            <option value="writer">작성자</option>
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-            <option value="title_content">제목/내용</option>
-          </select>
-         </div>
-        </SearchOption>
       </SearchContainer>
       : 
       <NonSearchContainer></NonSearchContainer>
@@ -141,11 +141,13 @@ const CategoryBtn=styled.button<isClick>`
 `
 const SearchContainer=styled.div`
   margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `
 const SearchOption=styled.div`
  float: right;
- margin-top: 13px;
-
+margin-left: 5px;
 `
 const NonSearchContainer=styled.div`
   height: 81px;
