@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId');
 let prePath="";
 const Header = () => {
@@ -23,12 +24,12 @@ const Header = () => {
     useEffect(()=>{
        
         if(currentUser){
-            axios.get(`http://localhost:8080/mypage/user/${id}`)
+            axios.get(`${API_URL}/mypage/user/${id}`)
             .then((res)=>{
             setUser(res.data.userData);});
     }
     
-    },[])
+    },[user])
    
     return (
         <HeaderStyle>

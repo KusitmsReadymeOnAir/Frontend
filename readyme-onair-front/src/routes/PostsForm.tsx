@@ -8,8 +8,11 @@ import {
   BsBookmarkFill,
   BsHeart,
   BsHeartFill,
+  BsChat
 } from 'react-icons/bs';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId')
+
 
 interface category{
     category:string,
@@ -18,7 +21,7 @@ const PostsForm = (category: category) => {
     const [posts, setPosts]=useState<any[]>([])
     useEffect(()=>{
         console.log(category);
-        axios.get(`http://localhost:8080/board/list/${category.category}`)
+        axios.get(`${API_URL}/board/list/${category.category}`)
         .then((res)=>{console.log(res.data.categoriedData); setPosts(res.data.categoriedData)})
       },[])
     const [modalShow, setModalShow]=useState(false);
@@ -79,32 +82,26 @@ const PostsForm = (category: category) => {
                 </>
               } 
               <CardTitle>
-                  <WriterImg src="../imgs/User.png"></WriterImg>
+                <WriterTitle>
+                <WriterImg src="../imgs/User.png"></WriterImg>
                   <Writer>{item.userId.name}</Writer>
+                </WriterTitle>
+                  
                   {/*좋아요, 스크랩 버튼 하나씩만 눌리게 하는 건 api 나오면 하겠음. 어떤 형태로 서버에 줘야할 지 모르겠어서*/}
                   <LikeBtns>
-                    <ScrapBtn onClick={onClickScrap}>
-                      {scrap === false ? (
-                        <BsBookmark size="35" />
-                      ) : (
-                        <BsBookmarkFill size="35" />
-                      )}
-                    </ScrapBtn>
-                    <LikeBtn onClick={onClickLike}>
-                      {like === false ? <BsHeart size="35" /> : <BsHeartFill size="35" />}
-                    </LikeBtn>
+                   <div>조회수</div>
+                    <ViewNum>{item.views}</ViewNum>
                   </LikeBtns>
                 </CardTitle>
+                <Center>
                 <Title>{item.title}</Title>
+                </Center>
+                
                 <Foot>
                   <Category>{Categories(item.category)}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
-                  <span>
-                    {String(item.date).substr(11, 12).split(":")[0] +
-                      ":" +
-                      String(item.date).substr(11, 12).split(":")[1]}
-                  </span>
+                 
                 </Date>
                 </Foot>
                 
@@ -138,60 +135,60 @@ background: #FFFFFF;
 border: 4px solid #000000;
 box-shadow: 4px 4px 0px #000000;
 border-radius: 12px;
+//position: relative;
 margin: 0 auto;
-position: relative;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 `
 const CardTitle=styled.div`
 display: flex;
-margin-left: 20px;
 margin-top: 10px;
+height: 70px;
+justify-content: space-between;
+width: 80%;
 `
 const Writer=styled.div`
   font-size: 24px;
   float: left;
-  width: 50%;
+  width: 80%;
   margin-top: 15px;
 `
+const WriterTitle=styled.div`
+  display: flex;
+`
 const WriterImg=styled.img`
-
+  margin-right: 10px;
 `
 const LikeBtns = styled.div`
-  width: 90%;
   display: flex;
-  justify-content: right;
-  margin-left: 40px;
-  margin-top: 10px;
 `;
 const CardImg=styled.img`
   width: 300px;
-  height:300px
+  height:250px;
+`;
+const Center=styled.div`
+ width: 300px;
+  margin-left: 50px;
 `
 const Title=styled.div`
   margin-top: 10px;
   text-align: left;
-  margin-left: 35px;
   font-size: 32px;
   font-weight: bold;
-  height: 107px;
+  height: 80px;
 `
-const ScrapBtn = styled.div`
-  margin-left: 20px;
-  cursor: pointer;
-`;
-const LikeBtn = styled(ScrapBtn)`
-  margin-right: 20px;
-`;
+const ViewNum=styled.div`
+margin-left: 5px;
+`
 const Foot=styled.div`
   display: flex;
-  justify-content: space-between;
-  padding-left: 20px;
+  margin-bottom: 10px;
 `
 const Category=styled.div`
+  margin-right: 150px;
 `
 const Date=styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
 `
 export default PostsForm;

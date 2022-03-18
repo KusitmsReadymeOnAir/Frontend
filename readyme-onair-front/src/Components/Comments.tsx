@@ -3,8 +3,7 @@ import { EditTextarea } from 'react-edit-text';
 import styled from 'styled-components';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { DateTxt } from '../routes/Post';
-import axios from 'axios';
-const API_URL = 'http://localhost:8080';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId')
 
 // styled components

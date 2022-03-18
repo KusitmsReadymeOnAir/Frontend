@@ -20,7 +20,10 @@ import {
 import e from 'cors';
 import Editor from '../Components/Editor';
 import axios from 'axios';
-const API_URL = 'http://localhost:8080';
+
+import { API_URL } from '../config';
+
+
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -63,10 +66,7 @@ const EditBtn = styled(CategoryName)`
   cursor: pointer;
 `;
 const DelBtn = styled(EditBtn)``;
-const Img=styled.img`
-width:500px;
-height: 500px;
-`
+
 const PostBox = styled.div`
   background: #ffffff;
   border-radius: 12px;
@@ -80,6 +80,10 @@ const ImageContainer = styled.div`
   justify-content: center;
   margin-bottom: 40px;
 `;
+const Img=styled.img`
+  width:500px;
+  height: 500px;
+`
 const ContentContainer = styled(ImageContainer)`
   margin-bottom: 0px;
 `;
@@ -106,6 +110,14 @@ interface IPost {
   numId: number;
 }
 
+
+interface IEditPost {
+  editTitle: string;
+  editContent: string;
+  editCategory: string;
+}
+
+
 const Post = () => {
   const currentUser = localStorage.getItem('userId');
   const id = useLocation().pathname.toString().substring(6);
@@ -119,9 +131,8 @@ const Post = () => {
   const [editTitle, setEditTitle] = useState(post?.title);
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
-
   const [contentArr, setContentArr]: any[] = useState([])
-  const [jsonRes, setJsonRes] = useState();
+  const contentArr: any[] = []
 
   // 게시물 불러오기
   useEffect(() => {
@@ -131,7 +142,9 @@ const Post = () => {
         setPost(res.data.board);
         setComments(res.data.comment)
     });
+
   }, []);
+  
 
   useEffect(() => {
     const newArr = []
@@ -245,6 +258,7 @@ const Post = () => {
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
           </PostBtns>
           <ImageContainer>
+
             {
               post?.imageId !== '' ?(
               <Img src={post?.imageId} alt="" />) : (
@@ -257,6 +271,7 @@ const Post = () => {
                 return arr
               })
             }</ContentContainer>
+
         </PostBox>
       </PostContainer>
 
