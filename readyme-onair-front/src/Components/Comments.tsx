@@ -16,7 +16,7 @@ const CommentContainer = styled.div`
 const Comment = styled.div`
   background: #ffffff;
   border-radius: 12px;
-  height: 120px;
+  height: auto;
   margin: 0 auto;
   margin-top: 20px;
   padding: 20px;
@@ -29,7 +29,7 @@ const CommentId = styled.h3`
 `;
 
 const CommentContent = styled.div`
-  height: 40px;
+  height: auto;
   border: 0px;
   width: 100%;
   margin: 5px 0;
@@ -214,64 +214,82 @@ const Comments = ({ id,comments, setComments, modalShow, setModalShow, setModalM
     <CommentContainer>
       <h2>댓글</h2>
       {comments?.map((comment: IComment) => {
-        return (
-          <CommentContainer key={comment._id}>
-          <Comment >
-            <Menu>
-              <BsThreeDotsVertical
-                onClick={toggleMenu}
-                size={20}
-                style={{ cursor: 'pointer' }}
-              />
-              {isMenuOpen ? (
-                <ButtonContainer>
-                  <Btn onClick={toggleRep}>답글 달기</Btn>
-                  <Btn onClick={() => onClickDelBtn(comment?._id, comment?.userId._id)}>
-                    삭제
-                  </Btn>
-                </ButtonContainer>
-              ) : (
-                <></>
-              )}
-            </Menu>
-            <CommentId>{comment?.userId.name}</CommentId>
-            <CommentContent>{comment.comment}</CommentContent>
-            <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
-          </Comment>
-          {comment?.childComments?.map((childComment: IComment) => {
-            return(
-              <CommentContainer key={childComment._id}
-              style={{
-                marginBottom: 0
-              }}>
-              <Comment>
-                  <CommentId>ㄴ {childComment.userId.name}</CommentId>
-                  <CommentContent>{childComment.comment}</CommentContent>
-              <DateTxt>작성날짜: {childComment.createdAt.toString().substring(0, 10)}</DateTxt>
-                </Comment> 
-              </CommentContainer>
-            )
-          })}
-          <Comment style={{ display: isRepOpen ? 'block' : 'none' }}>
-              <CommentId>✍️ 답글 작성</CommentId>
-        <EditTextarea
-          id="comment"
-          placeholder="답글을 입력하세요"
-          value={newChildComment}
-          onChange={(value) => onChangeNewChildComment(value)}
-          rows={2}
-          style={{
-            marginBottom: '10px',
-            width: '100%',
-            height: '70px',
-            resize: 'none',
-          }}
-        />
-        <SaveBtn onClick={() => onClickNewChildComment(comment._id)}>답글 등록</SaveBtn>
+        if (comment.isDeleted) {
+          return (
+            <CommentContainer key={comment._id}>
+            <Comment >
+              <Menu>
+                <BsThreeDotsVertical
+                  onClick={toggleMenu}
+                  size={20}
+                  style={{ cursor: 'pointer' }}
+                />
+                {isMenuOpen ? (
+                  <ButtonContainer>
+                    <Btn onClick={toggleRep}>답글 달기</Btn>
+                    <Btn onClick={() => onClickDelBtn(comment?._id, comment?.userId._id)}>
+                      삭제
+                    </Btn>
+                  </ButtonContainer>
+                ) : (
+                  <></>
+                )}
+              </Menu>
+              <CommentId>{comment?.userId.name}</CommentId>
+              <CommentContent>{comment.comment}</CommentContent>
+              <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
             </Comment>
-          </CommentContainer>
-        );
-      })}
+            {comment?.childComments?.map((childComment: IComment) => {
+              return(
+                <CommentContainer key={childComment._id}
+                style={{
+                  marginBottom: 0
+                }}>
+                <Comment>
+                    <CommentId>ㄴ {childComment.userId.name}</CommentId>
+                    <CommentContent>{childComment.comment}</CommentContent>
+                <DateTxt>작성날짜: {childComment.createdAt.toString().substring(0, 10)}</DateTxt>
+                  </Comment> 
+                </CommentContainer>
+              )
+            })}
+            <Comment style={{ display: isRepOpen ? 'block' : 'none' }}>
+                <CommentId>✍️ 답글 작성</CommentId>
+          <EditTextarea
+            id="comment"
+            placeholder="답글을 입력하세요"
+            value={newChildComment}
+            onChange={(value) => onChangeNewChildComment(value)}
+            rows={2}
+            style={{
+              marginBottom: '10px',
+              width: '100%',
+              height: '70px',
+              resize: 'none',
+            }}
+          />
+          <SaveBtn onClick={() => onClickNewChildComment(comment._id)}>답글 등록</SaveBtn>
+              </Comment>
+            </CommentContainer>
+          );
+        } else {
+          <CommentContainer key={comment._id}>
+            <Comment >
+              <Menu>
+                <BsThreeDotsVertical
+                  onClick={toggleMenu}
+                  size={20}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Menu>
+              <CommentId>{comment?.userId.name}</CommentId>
+              <CommentContent>삭제된 댓글입니다.</CommentContent>
+              <DateTxt>작성날짜: {comment.createdAt.toString().substring(0, 10)}</DateTxt>
+            </Comment>
+            </CommentContainer>
+        }
+        }
+        )}
       <h2>댓글 작성</h2>
       <Comment>
         <EditTextarea
