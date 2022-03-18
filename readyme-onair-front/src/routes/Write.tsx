@@ -88,6 +88,10 @@ export const SubmitBtn = styled.button`
   margin-top: 30px;
 `;
 
+const ImageForm =styled.div`
+  margin: 30px;
+`
+
 interface IPost {
   title: string;
   content: string;
@@ -189,10 +193,17 @@ const Write = () => {
       </InfoForm>
       <ContentContainer>
         <Editor onChangeContent={onChangeContent} />
-        <form method="post" encType="multipart/form-data">
+        <ImageForm>
+        <form method="post" encType="multipart/form-data" style={{
+          marginBottom: '20px'
+        }}>
+          <span>📷&nbsp;사진 첨부하기</span>
           <input type="file" id="imgs" accept="img/*" onChange={onChangeImg} />
         </form>
-        <img src={imageId} alt="" />
+        <img src={imageId} alt="" style={{
+          width: '50%'
+        }}/>
+        </ImageForm>
         <SubmitContainer>
           <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
         </SubmitContainer>
