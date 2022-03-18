@@ -121,14 +121,15 @@ const Post = () => {
   const [editContent, setEditContent] = useState(post?.content);
 
   const [contentArr, setContentArr]: any[] = useState([])
+  const [jsonRes, setJsonRes] = useState();
 
   // 게시물 불러오기
   useEffect(() => {
     axios.get(`${API_URL}/board/show/${id}`)
       .then((res)=>{
+        setJsonRes(res.data)
         setPost(res.data.board);
         setComments(res.data.comment)
-        console.log(res.data.board)
     });
   }, []);
 
@@ -235,6 +236,7 @@ const Post = () => {
         <PostBox>
           <PostBtns>
             <DateTxt>
+              작성자: {post?.userId.name}&nbsp;
               작성날짜: {post?.date.toString().substring(0, 10)}&nbsp;
               글번호: {post?.numId}&nbsp;
               조회수: {post?.views}&nbsp;
@@ -300,8 +302,7 @@ const Post = () => {
       )}
       <Comments
         id={id}
-        comments={comments}
-        setComments={setComments}
+        commentsFromPost={comments}
         modalShow={modalShow}
         setModalShow={setModalShow}
         setModalMessge={setModalMessge}
