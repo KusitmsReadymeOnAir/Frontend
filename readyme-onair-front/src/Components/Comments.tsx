@@ -143,6 +143,7 @@ const Comments = ({ id, commentsFromPost, modalShow, setModalShow, setModalMessg
       }).then(async (res) => {
         const json = await res.json();
         console.log(json)
+        window.location.reload();
       });
     } else {
       setModalMessge('로그인이 필요합니다.')
