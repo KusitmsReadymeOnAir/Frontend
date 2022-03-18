@@ -15,8 +15,6 @@ const Posts = () => {
  
   const [cookies, setCookie]=useCookies();
   
-
-
   //각 버튼들 클릭 유무를 배열로 관리해서 하나 클릭하면 그 전에 클릭했던거 색 없어지도록 하기
   //[디자인, 개발, 기획, 프로젝트모집, 일상]
   const [click, setClick]=useState<boolean[]>([false, false, false, false, false])
@@ -40,9 +38,9 @@ const Posts = () => {
     }
   }
   return (
-   
     <>
     <Container>
+      {category===""?
       <SearchContainer>
       <SearchInput
             onChange={
@@ -66,6 +64,10 @@ const Posts = () => {
          </div>
         </SearchOption>
       </SearchContainer>
+      : 
+      <NonSearchContainer></NonSearchContainer>
+    }
+      
     
          
      <Category>
@@ -143,6 +145,10 @@ const SearchContainer=styled.div`
 const SearchOption=styled.div`
  float: right;
  margin-top: 13px;
+
+`
+const NonSearchContainer=styled.div`
+  height: 81px;
 `
 const SearchInput=styled.input`
 float: right;
