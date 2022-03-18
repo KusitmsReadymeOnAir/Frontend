@@ -67,7 +67,7 @@ const SaveBtn = styled(Btn)`
   margin-top: 40px;
 `;
 
-interface IComment {
+export interface IComment {
   _id: string;
   boardId: string;
   userId: { _id: string; name: string };
@@ -84,8 +84,7 @@ interface INewComment {
   userId: string | null;
 }
 
-const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
-  const [comments, setComments] = useState<IComment[]>();
+const Comments = ({ id,comments, setComments, modalShow, setModalShow, setModalMessge }: any) => {
   const [newComment, setNewComment] = useState(''); // 새로 등록할 댓글
   const [newChildComment, setNewChildComment] = useState('')  // 새로 등록할 답글
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -112,7 +111,7 @@ const Comments = ({ id, modalShow, setModalShow, setModalMessge }: any) => {
       const jsonRes = await res.json();
       setComments(jsonRes.comment);
     });
-  }, [comments]);
+  }, []);
 
   // 댓글 값 변경
   const onChangeNewComment = (value: string) => {
