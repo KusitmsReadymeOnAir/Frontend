@@ -19,4 +19,4 @@
 
 
 #### ✨ 프로젝트소개
-https://www.notion.so/standing1011/ffb34cfe841d4f5d86a9bfb22a62dee6
+https://standing1011.notion.site/ffb34cfe841d4f5d86a9bfb22a62dee6
