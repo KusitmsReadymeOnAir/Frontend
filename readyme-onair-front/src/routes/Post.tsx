@@ -103,7 +103,7 @@ interface IPost {
   title: string;
   content: string;
   category: string;
-  userId: { _id: string; name: string };
+  userId: string;
   date: Date;
   imageId?: string;
   views: number;
@@ -137,9 +137,10 @@ const Post = () => {
   useEffect(() => {
     axios.get(`${API_URL}/board/show/${id}`)
       .then((res)=>{
+        console.log(res);
         setPost(res.data.board);
         setComments(res.data.comment)
-    });
+    });;
 
   }, []);
   
@@ -156,7 +157,7 @@ const Post = () => {
     setEditContent(post?.content);
     setEditCategory(post?.category);
     // 게시물 작성자와 현재 사용자가 다른 경우
-    if (post?.userId._id !== currentUser) {
+    if (post?.userId !== currentUser) {
       setModalMessge('자신이 작성한 글만 수정할 수 있습니다.');
       setModalShow(!modalShow);
     } else {
@@ -198,7 +199,7 @@ const Post = () => {
 
   // 게시물 삭제
   const onClickDelBtn = () => {
-    const user = post?.userId._id;
+    const user = post?.userId;
     if (user !== currentUser) {
       setModalMessge('자신이 작성한 글만 삭제할 수 있습니다.');
       setModalShow(!modalShow);
@@ -247,7 +248,7 @@ const Post = () => {
         <PostBox>
           <PostBtns>
             <DateTxt>
-              작성자: {post?.userId.name}&nbsp;
+              작성자: {post?.userId}&nbsp;
               작성날짜: {post?.date.toString().substring(0, 10)}&nbsp;
               글번호: {post?.numId}&nbsp;
               조회수: {post?.views}&nbsp;
