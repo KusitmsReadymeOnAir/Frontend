@@ -48,7 +48,7 @@ const Header = () => {
                     </Link>
                     <Link to="/mypage"  style={{ textDecoration: "none", color:"black"}}>
                     <User>
-                    <UserImg src="../imgs/User.png"></UserImg>
+                    <UserImg src="../imgs/readyme_img.png"></UserImg>
                     <UserName>{user[0].name}</UserName>
                     </User> 
                     </Link>
@@ -109,6 +109,7 @@ const User=styled.div`
 `
 const UserImg=styled.img`
     margin-bottom: 10px;
+    width: 80px;
 `
 const UserName=styled.div`
     text-align: center;
