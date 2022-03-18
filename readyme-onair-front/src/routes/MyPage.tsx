@@ -12,10 +12,21 @@ import { setSourceMapRange } from 'typescript';
 const MyPage = () => {
     const [click, setClick]=useState<boolean[]>([false, false])
     const [category, setCategory]=useState("post");
-    const [posts, setPosts]=useState<any[]>([]);
+    const [posts, setPosts]=useState<any[]>([{}]);
+    const [cnt, setCnt]=useState("");
     const [user, setUser]=useState<any[]>([{}]);
     const id=localStorage.getItem("userId");
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    
+    const Categories=(category: any)=>{
+        switch(category){
+          case "design": return "디자인"
+          case "develop": return "개발"
+          case "pd": return "기획"
+          case "teambuilding": return "프로젝트모집"
+          case "daily": return "일상"
+        }
+        
+      }
     const Logout=()=>{
         axios.get("http://localhost:8080/auth/logout")
         .then((res)=>{console.log(res.status);
@@ -35,12 +46,14 @@ const MyPage = () => {
             axios.get(`http://localhost:8080/mypage/board/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts( res.data.boardData);
-                console.log(res.data.boardData)});
+                setCnt(res.data.commentCnt[0].cnt)
+                console.log(res.data.commentCnt[0].cnt)});
         }
         else if (category==="comment"){
             axios.get(`http://localhost:8080/mypage/comment/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts(res.data.commentData)
+                setCnt(res.data.commentCnt[0].cnt)
                 console.log(res.data.commentData)})} 
     },[category])
     return (
@@ -71,37 +84,36 @@ const MyPage = () => {
        </Menu>
        <List>
         {posts && posts.map((item)=>{
-            console.log(item);
-            console.log(item.commentCnt[0].cnt);
+            //console.log(item);
+            //console.log(item.commentCnt[0].cnt);
             
             return(
-                <Link to={`/post/${item.commentData[0][0]._id}`} style={{ textDecoration: "none" , color:"black"}}>
+                <Link to={`/post/${item._id}`} style={{ textDecoration: "none" , color:"black"}}>
                 <ListForm>
                     <Head>
-                    <Writer>{item.commentData[0][0].userId.name}</Writer>
+                    <Writer></Writer>
                     <Date>
-                    <span>{String(item.commentData[0][0].date).substr(0, 10) + " "}</span>
+                    <span>{String(item.date).substr(0, 10) + " "}</span>
                     <span>
-                    {String(item.commentData[0][0].date).substr(11, 12).split(":")[0] +
+                    {String(item.date).substr(11, 12).split(":")[0] +
                       ":" +
-                      String(item.commentData[0][0].date).substr(11, 12).split(":")[1]}
+                      String(item.date).substr(11, 12).split(":")[1]}
                     </span>
                   </Date>
                     </Head>
-                    <Title>{item.commentData[0][0].title}</Title>
+                    <Title>{item.title}</Title>
                     <Foot>
-                    <Category>{item.category}</Category>
+                    <Category>{Categories(item.category)}</Category>
                     <Comment>
                     <CommentImg src="../imgs/Comment.png"></CommentImg>
-                    <CommentNum>{item.commentCnt[0].cnt}</CommentNum>
+                    <CommentNum>{cnt}</CommentNum>
                     </Comment>
                     </Foot>
-                    
                 </ListForm>
                 </Link>
             )
         })}
-       </List>
+    </List>
    </Container>
   )
 }
