@@ -4,7 +4,7 @@ import { Cookies, useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { setSourceMapRange } from 'typescript';
-
+import { API_URL } from '../config';
 /*interface posts{
     posts:Array<object>;
 }
@@ -28,7 +28,7 @@ const MyPage = () => {
         
       }
     const Logout=()=>{
-        axios.get("http://localhost:8080/auth/logout")
+        axios.get(`${API_URL}/auth/logout`)
         .then((res)=>{console.log(res.status);
             localStorage.removeItem("userId");
             //removeCookie("user");
@@ -37,20 +37,20 @@ const MyPage = () => {
         )
     }
     useEffect(()=>{
-        axios.get(`http://localhost:8080/mypage/user/${id}`)
+        axios.get(`${API_URL}/mypage/user/${id}`)
         .then((res)=>{console.log(res.data.userData);
         setUser(res.data.userData);});
     },[]);
     useEffect(()=>{
         if (category==="post"){
-            axios.get(`http://localhost:8080/mypage/board/${id}`)
+            axios.get(`${API_URL}/mypage/board/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts( res.data.boardData);
                 setCnt(res.data.commentCnt[0].cnt)
                 console.log(res.data.commentCnt[0].cnt)});
         }
         else if (category==="comment"){
-            axios.get(`http://localhost:8080/mypage/comment/${id}`)
+            axios.get(`${API_URL}/mypage/comment/${id}`)
             .then((res)=>{//setPosts(res.data); 
                 setPosts(res.data.commentData)
                 setCnt(res.data.commentCnt[0].cnt)

@@ -20,7 +20,10 @@ import {
 import e from 'cors';
 import Editor from '../Components/Editor';
 import axios from 'axios';
-const API_URL = 'http://localhost:8080';
+
+import { API_URL } from '../config';
+
+
 
 // 개별 게시글 페이지
 const Container = styled.div`
@@ -70,7 +73,7 @@ height: 500px;
 const PostBox = styled.div`
   background: #ffffff;
   border-radius: 12px;
-  height: 600px;
+  
   margin: 0 auto;
   padding: 20px;
   padding-left: 40px;
@@ -80,6 +83,10 @@ const ImageContainer = styled.div`
   justify-content: center;
   margin-bottom: 40px;
 `;
+const Img=styled.img`
+  width:500px;
+  height: 500px;
+`
 const ContentContainer = styled(ImageContainer)`
   margin-bottom: 0px;
 `;
@@ -119,6 +126,14 @@ interface IPost {
   imageId?: string;
 }
 
+
+interface IEditPost {
+  editTitle: string;
+  editContent: string;
+  editCategory: string;
+}
+
+
 const Post = () => {
   const currentUser = localStorage.getItem('userId');
   const id = useLocation().pathname.toString().substring(6);
@@ -133,6 +148,7 @@ const Post = () => {
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
 
+
   const contentArr: any[] = []
 
   // 게시물 불러오기
@@ -144,7 +160,9 @@ const Post = () => {
         contentArr[0] = post?.content
         console.log(contentArr)
     });
+
   }, []);
+  
 
   // 게시물 수정
   const onClickEditBtn = () => {
@@ -249,6 +267,7 @@ const Post = () => {
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
           </PostBtns>
           <ImageContainer>
+
             {
               post?.imageId !== '' ?(
               <Img src={post?.imageId} alt="" />) : (
@@ -262,6 +281,7 @@ const Post = () => {
                 return arr
               })
             }</ContentContainer>
+
         </PostBox>
       </PostContainer>
       <LikeBtns>
