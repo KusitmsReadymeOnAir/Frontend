@@ -94,11 +94,7 @@ const MyPage = () => {
                     <Writer></Writer>
                     <Date>
                     <span>{String(item.date).substr(0, 10) + " "}</span>
-                    <span>
-                    {String(item.date).substr(11, 12).split(":")[0] +
-                      ":" +
-                      String(item.date).substr(11, 12).split(":")[1]}
-                    </span>
+                    
                   </Date>
                     </Head>
                     <Title>{item.title}</Title>
