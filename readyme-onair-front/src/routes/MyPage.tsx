@@ -34,13 +34,13 @@ const MyPage = () => {
         if (category==="post"){
             axios.get(`http://localhost:8080/mypage/board/${id}`)
             .then((res)=>{//setPosts(res.data); 
-                setPosts( res.data);
+                setPosts( res.data.boardData);
                 console.log(res.data.boardData)});
         }
         else if (category==="comment"){
             axios.get(`http://localhost:8080/mypage/comment/${id}`)
             .then((res)=>{//setPosts(res.data); 
-                setPosts(res.data)
+                setPosts(res.data.commentData)
                 console.log(res.data.commentData)})} 
     },[category])
     return (
