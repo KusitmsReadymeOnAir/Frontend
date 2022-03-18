@@ -11,7 +11,12 @@ import {
 import { BiFemaleSign } from 'react-icons/bi';
 import { useLocation } from 'react-router-dom';
 import { EditText, EditTextarea } from 'react-edit-text';
-import { categories, SelectCategory, SubmitBtn, SubmitContainer } from './Write';
+import {
+  categories,
+  SelectCategory,
+  SubmitBtn,
+  SubmitContainer,
+} from './Write';
 import e from 'cors';
 import Editor from '../Components/Editor';
 const API_URL = 'http://localhost:8080';
@@ -97,10 +102,10 @@ export const DateTxt = styled.p`
   opacity: 0.3;
   font-size: 12px;
   margin-left: 10px;
-`
+`;
 
 interface IPost {
-  _id: string
+  _id: string;
   title: string;
   content: string;
   category: string;
@@ -110,28 +115,27 @@ interface IPost {
 }
 
 interface IEditPost {
-  editTitle: string,
-    editContent: string,
-    editCategory: string
+  editTitle: string;
+  editContent: string;
+  editCategory: string;
 }
 
 const Post = () => {
-  const currentUser = localStorage.getItem('userId')
+  const currentUser = localStorage.getItem('userId');
   const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>();
   const [modalShow, setModalShow] = useState(false);
-  const [ modalMessage, setModalMessge] = useState('모달창 안내 메시지')
+  const [modalMessage, setModalMessge] = useState('모달창 안내 메시지');
   const [scrap, setScrap] = useState(false);
   const [like, setLike] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editTitle, setEditTitle] = useState(post?.title);
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
-  const [pagePosition, setPagePosition] = useState(0)
 
   // 게시물 불러오기
   useEffect(() => {
-    fetch(`${API_URL}/board/show/` + id, {
+    fetch(`${API_URL}/board/show/${id}`, {
       method: 'GET',
     }).then(async (res) => {
       const jsonRes = await res.json();
@@ -141,20 +145,20 @@ const Post = () => {
 
   // 게시물 수정
   const onClickEditBtn = () => {
-    setEditTitle(post?.title)
-    setEditContent(post?.content)
-    setEditCategory(post?.category)
+    setEditTitle(post?.title);
+    setEditContent(post?.content);
+    setEditCategory(post?.category);
     // 게시물 작성자와 현재 사용자가 다른 경우
     if (post?.userId._id !== currentUser) {
       setModalMessge('자신이 작성한 글만 수정할 수 있습니다.');
-      setModalShow(!modalShow)
+      setModalShow(!modalShow);
     } else {
       // 게시물 수정 창으로 이동
       setIsEdit(true);
       window.scrollTo({
         top: 800,
-        behavior: 'smooth'
-      })
+        behavior: 'smooth',
+      });
     }
   };
   const onClickUpdate = () => {
@@ -173,8 +177,8 @@ const Post = () => {
       body: JSON.stringify(editData),
     }).then(async (res) => {
       const jsonRes = await res.json();
-      console.log(jsonRes)
-      setIsEdit(false)
+      console.log(jsonRes);
+      setIsEdit(false);
     });
     // 게시물 다시 가져와서 렌더링
     fetch(`${API_URL}/board/show/` + id, {
@@ -183,41 +187,41 @@ const Post = () => {
       const jsonRes = await res.json();
       setPost(jsonRes.board[0]);
     });
-  }
+  };
 
   // 게시물 삭제
   const onClickDelBtn = () => {
     const user = post?.userId._id;
     if (user !== currentUser) {
       setModalMessge('자신이 작성한 글만 삭제할 수 있습니다.');
-      setModalShow(!modalShow)
+      setModalShow(!modalShow);
     } else {
-      const delData = { boardId:id, userId: user };
+      const delData = { boardId: id, userId: user };
       fetch(`${API_URL}/board/delete`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(delData),
-      }).then(async(res) => {
+      }).then(async (res) => {
         const successMsg = await res.json();
-        if(successMsg){
-          setModalMessge('게시글이 삭제되었습니다.')
-          setModalShow(!modalShow)
+        if (successMsg) {
+          setModalMessge('게시글이 삭제되었습니다.');
+          setModalShow(!modalShow);
         }
-      })
+      });
     }
-  }
+  };
 
   const onChangeEditCategory = (e: any) => {
-    setEditCategory(e.currentTarget.value)
-  }
+    setEditCategory(e.currentTarget.value);
+  };
   const onChangeEditContent = (value: string) => {
-    setEditContent(value)
-  }
+    setEditContent(value);
+  };
   const onChangeEditTitle = (e: any) => {
-    setEditTitle(e.currentTarget.value)
-  }
+    setEditTitle(e.currentTarget.value);
+  };
 
   const onClickScrap = () => {
     setScrap(!scrap);
@@ -235,16 +239,16 @@ const Post = () => {
         <h1>{post?.title}</h1>
         <PostBox>
           <PostBtns>
-            <DateTxt>작성날짜: {post?.date.toString().substring(0, 10)}</DateTxt>
+            <DateTxt>
+              작성날짜: {post?.date.toString().substring(0, 10)}
+            </DateTxt>
             <EditBtn onClick={onClickEditBtn}>수정</EditBtn>
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
           </PostBtns>
           <ImageContainer>
             <img src={post?.imageId} alt="" />
           </ImageContainer>
-          <ContentContainer>
-            {post?.content}
-          </ContentContainer>
+          <ContentContainer>{post?.content}</ContentContainer>
         </PostBox>
       </PostContainer>
       <LikeBtns>
@@ -276,30 +280,30 @@ const Post = () => {
               width: '50%',
               height: '20px',
               fontSize: '30px',
-              marginBottom: '20px'
+              marginBottom: '20px',
             }}
           />
           <form>
-          <SelectCategory
-            value={editCategory}
-            onChange={onChangeEditCategory}
-            style={{
-              marginBottom: '20px'
-            }}
-          >
-            {categories.map((category) => {
-              return (
-                <option key={category.value} value={category.value}>
-                  {category.name}
-                </option>
-              );
-            })}
-          </SelectCategory>
+            <SelectCategory
+              value={editCategory}
+              onChange={onChangeEditCategory}
+              style={{
+                marginBottom: '20px',
+              }}
+            >
+              {categories.map((category) => {
+                return (
+                  <option key={category.value} value={category.value}>
+                    {category.name}
+                  </option>
+                );
+              })}
+            </SelectCategory>
           </form>
-          <Editor onChangeContent={onChangeEditContent}/>
-        <SubmitContainer>
-          <SubmitBtn onClick={onClickUpdate}>수정하기</SubmitBtn>
-        </SubmitContainer>
+          <Editor onChangeContent={onChangeEditContent} />
+          <SubmitContainer>
+            <SubmitBtn onClick={onClickUpdate}>수정하기</SubmitBtn>
+          </SubmitContainer>
         </EditContainer>
       ) : (
         <></>
@@ -312,9 +316,7 @@ const Post = () => {
       />
       <WarnModal
         show={modalShow}
-        message={
-          modalMessage
-        }
+        message={modalMessage}
         setModalShow={setModalShow}
       />
     </Container>
