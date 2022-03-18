@@ -99,11 +99,7 @@ const PostsForm = (category: category) => {
                   <Category>{Categories(item.category)}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
-                  <span>
-                    {String(item.date).substr(11, 12).split(":")[0] +
-                      ":" +
-                      String(item.date).substr(11, 12).split(":")[1]}
-                  </span>
+                 
                 </Date>
                 </Foot>
                 
@@ -171,8 +167,8 @@ const CardImg=styled.img`
   height:250px;
 `;
 const Center=styled.div`
-  display:flex;
-  justify-content: flex-start;
+ width: 300px;
+  margin-left: 50px;
 `
 const Title=styled.div`
   margin-top: 10px;
@@ -189,7 +185,7 @@ const Foot=styled.div`
   margin-bottom: 10px;
 `
 const Category=styled.div`
-  margin-right: 120px;
+  margin-right: 150px;
 `
 const Date=styled.div`
 `

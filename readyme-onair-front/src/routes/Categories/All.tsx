@@ -118,11 +118,7 @@ const All=({searchText, searchOption}: search)=>{
                   <Category>{Categories(item.category)}</Category>
                 <Date>
                   <span>{String(item.date).substr(0, 10) + " "}</span>
-                  <span>
-                    {String(item.date).substr(11, 12).split(":")[0] +
-                      ":" +
-                      String(item.date).substr(11, 12).split(":")[1]}
-                  </span>
+                  
                 </Date>
                 </Foot>
                 
@@ -190,13 +186,14 @@ const CardImg=styled.img`
   height:250px;
 `;
 const Center=styled.div`
-  display:flex;
-  justify-content: flex-start;
+  width: 300px;
+  margin-left: 50px;
 `
 const Title=styled.div`
   margin-top: 10px;
   text-align: left;
   font-size: 32px;
+  
   font-weight: bold;
   height: 80px;
 `
@@ -204,11 +201,12 @@ const ViewNum=styled.div`
 margin-left: 5px;
 `
 const Foot=styled.div`
+  
   display: flex;
   margin-bottom: 10px;
 `
 const Category=styled.div`
-  margin-right: 120px;
+  margin-right: 150px;
 `
 const Date=styled.div`
 `
