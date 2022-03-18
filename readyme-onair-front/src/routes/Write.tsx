@@ -5,7 +5,7 @@ import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import Editor from '../Components/Editor';
 const API_URL = 'http://localhost:8080';
-const currentUser = localStorage.getItem('userId')
+const currentUser = localStorage.getItem('userId');
 
 export const categories = [
   {
@@ -91,7 +91,7 @@ interface IPost {
   content: string;
   category: string;
   userId: string;
-  imageId: string;
+  imageId?: string;
 }
 
 const Write = () => {
@@ -103,13 +103,10 @@ const Write = () => {
   const navigate = useNavigate();
 
   // 서버로 데이터 전송
-  const userId :any= currentUser;
-  const postData: IPost = { title, content, category, userId, imageId };
-
   const onUpload = (e: any) => {
-    console.log(postData);
-    console.log(imageId);
     e.preventDefault();
+    const userId: any = currentUser;
+    const postData: IPost = { title, content, category, userId, imageId };
     fetch(`${API_URL}/board/write`, {
       method: 'POST',
       headers: {
@@ -119,15 +116,21 @@ const Write = () => {
     }).then(async (res) => {
       const jsonRes = await res.json();
       console.log('응답 : ', jsonRes);
-      setId(jsonRes.data._id)
-    })
-    fetch(`${API_URL}/board/show/` + id, {
-      method:'GET'
-    }).then(async(res) => {
-      const jsonRes = await res.json();
-      navigate(`/post/${id}`)
-    })
+      setId(jsonRes.data._id);
+    });
   };
+
+  // id 이펙트 함수
+  useEffect(() => {
+    if (id) {
+      fetch(`${API_URL}/board/show/${id}`, {
+        method: 'GET',
+      }).then(async (res) => {
+        const jsonRes = await res.json();
+        navigate(`/post/${id}`);
+      });
+    }
+  }, [id]);
 
   const onChangeTitle = (value: string) => {
     setTitle(value);
@@ -189,9 +192,7 @@ const Write = () => {
         </form>
         <img src={imageId} alt="" />
         <SubmitContainer>
-          <Link to={`/post/${id}`}>
-            <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
-          </Link>
+          <SubmitBtn onClick={onUpload}>업로드</SubmitBtn>
         </SubmitContainer>
       </ContentContainer>
     </Container>
