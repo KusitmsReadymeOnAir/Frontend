@@ -70,7 +70,7 @@ const DelBtn = styled(EditBtn)``;
 const PostBox = styled.div`
   background: #ffffff;
   border-radius: 12px;
-  
+  height: auto;
   margin: 0 auto;
   padding: 20px;
   padding-left: 40px;
@@ -86,21 +86,6 @@ const Img=styled.img`
 `
 const ContentContainer = styled(ImageContainer)`
   margin-bottom: 0px;
-`;
-
-const LikeBtns = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: right;
-  margin-left: 40px;
-  margin-top: 20px;
-`;
-const ScrapBtn = styled.div`
-  margin-left: 20px;
-  cursor: pointer;
-`;
-const LikeBtn = styled(ScrapBtn)`
-  margin-right: 20px;
 `;
 const EditContainer = styled(PostBox)`
   width: 80%;
@@ -121,6 +106,8 @@ interface IPost {
   userId: { _id: string; name: string };
   date: Date;
   imageId?: string;
+  views: number;
+  numId: number;
 }
 
 
@@ -144,22 +131,26 @@ const Post = () => {
   const [editTitle, setEditTitle] = useState(post?.title);
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
-
-
+  const [contentArr, setContentArr]: any[] = useState([])
   const contentArr: any[] = []
 
   // 게시물 불러오기
   useEffect(() => {
     axios.get(`${API_URL}/board/show/${id}`)
       .then((res)=>{
+        setJsonRes(res.data)
         setPost(res.data.board);
         setComments(res.data.comment)
-        contentArr[0] = post?.content
-        console.log(contentArr)
     });
 
   }, []);
   
+
+  useEffect(() => {
+    const newArr = []
+    newArr[0] = post?.content
+    setContentArr(newArr)
+  }, [post])
 
   // 게시물 수정
   const onClickEditBtn = () => {
@@ -258,7 +249,10 @@ const Post = () => {
         <PostBox>
           <PostBtns>
             <DateTxt>
-              작성날짜: {post?.date.toString().substring(0, 10)}
+              작성자: {post?.userId.name}&nbsp;
+              작성날짜: {post?.date.toString().substring(0, 10)}&nbsp;
+              글번호: {post?.numId}&nbsp;
+              조회수: {post?.views}&nbsp;
             </DateTxt>
             <EditBtn onClick={onClickEditBtn}>수정</EditBtn>
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
@@ -274,29 +268,12 @@ const Post = () => {
           </ImageContainer>
           <ContentContainer>{
               contentArr?.map((arr: any) => {
-                console.log(arr)
                 return arr
               })
             }</ContentContainer>
 
         </PostBox>
       </PostContainer>
-      <LikeBtns>
-        <ScrapBtn onClick={onClickScrap}>
-          {scrap === false ? (
-            <BsBookmark size="35" />
-          ) : (
-            <BsBookmarkFill size="35" />
-          )}
-        </ScrapBtn>
-        <LikeBtn onClick={onClickLike}>
-          {like === false ? (
-            <BsHeart size="35" />
-          ) : (
-            <BsHeartFill size="35" color="violet" />
-          )}
-        </LikeBtn>
-      </LikeBtns>
 
       {isEdit ? (
         <EditContainer>
@@ -340,8 +317,7 @@ const Post = () => {
       )}
       <Comments
         id={id}
-        comments={comments}
-        setComments={setComments}
+        commentsFromPost={comments}
         modalShow={modalShow}
         setModalShow={setModalShow}
         setModalMessge={setModalMessge}
