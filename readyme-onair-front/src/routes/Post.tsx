@@ -111,13 +111,6 @@ interface IPost {
 }
 
 
-interface IEditPost {
-  editTitle: string;
-  editContent: string;
-  editCategory: string;
-}
-
-
 const Post = () => {
   const currentUser = localStorage.getItem('userId');
   const id = useLocation().pathname.toString().substring(6);
@@ -125,8 +118,6 @@ const Post = () => {
   const [comments, setComments] = useState<IComment[]>();
   const [modalShow, setModalShow] = useState(false);
   const [modalMessage, setModalMessge] = useState('모달창 안내 메시지');
-  const [scrap, setScrap] = useState(false);
-  const [like, setLike] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editTitle, setEditTitle] = useState(post?.title);
   const [editCategory, setEditCategory] = useState(post?.category);
@@ -137,18 +128,20 @@ const Post = () => {
   useEffect(() => {
     axios.get(`${API_URL}/board/show/${id}`)
       .then((res)=>{
-        console.log(res);
+
+
+        console.log(res.data)
         setPost(res.data.board);
         setComments(res.data.comment)
-    });;
+    });
 
   }, []);
-  
 
   useEffect(() => {
     const newArr = []
     newArr[0] = post?.content
     setContentArr(newArr)
+    console.log(post)
   }, [post])
 
   // 게시물 수정
@@ -231,15 +224,6 @@ const Post = () => {
     setEditTitle(e.currentTarget.value);
   };
 
-  const onClickScrap = () => {
-    setScrap(!scrap);
-    console.log('스크랩');
-  };
-  const onClickLike = () => {
-    setLike(!like);
-    console.log('좋아요');
-  };
-
   return (
     <Container>
       <PostContainer>
@@ -266,10 +250,12 @@ const Post = () => {
             }
           </ImageContainer>
           <ContentContainer>{
-              contentArr?.map((arr: any) => {
+              contentArr?.map((arr: string) => {
+                console.log(arr)
                 return arr
               })
-            }</ContentContainer>
+            }
+          </ContentContainer>
 
         </PostBox>
       </PostContainer>
