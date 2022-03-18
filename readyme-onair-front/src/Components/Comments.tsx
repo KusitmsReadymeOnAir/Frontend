@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { DateTxt } from '../routes/Post';
 import { API_URL } from '../config';
+import axios from 'axios';
 const currentUser = localStorage.getItem('userId')
 
 // styled components

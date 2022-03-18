@@ -132,13 +132,11 @@ const Post = () => {
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
   const [contentArr, setContentArr]: any[] = useState([])
-  const contentArr: any[] = []
 
   // 게시물 불러오기
   useEffect(() => {
     axios.get(`${API_URL}/board/show/${id}`)
       .then((res)=>{
-        setJsonRes(res.data)
         setPost(res.data.board);
         setComments(res.data.comment)
     });
