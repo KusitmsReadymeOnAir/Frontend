@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Comments from '../Components/Comments';
+import Comments, { IComment } from '../Components/Comments';
 import WarnModal from '../Components/WarnModal';
 import {
   BsBookmark,
@@ -19,6 +19,7 @@ import {
 } from './Write';
 import e from 'cors';
 import Editor from '../Components/Editor';
+import axios from 'axios';
 const API_URL = 'http://localhost:8080';
 
 // 개별 게시글 페이지
@@ -62,6 +63,10 @@ const EditBtn = styled(CategoryName)`
   cursor: pointer;
 `;
 const DelBtn = styled(EditBtn)``;
+const Img=styled.img`
+width:500px;
+height: 500px;
+`
 const PostBox = styled.div`
   background: #ffffff;
   border-radius: 12px;
@@ -114,16 +119,11 @@ interface IPost {
   imageId?: string;
 }
 
-interface IEditPost {
-  editTitle: string;
-  editContent: string;
-  editCategory: string;
-}
-
 const Post = () => {
   const currentUser = localStorage.getItem('userId');
   const id = useLocation().pathname.toString().substring(6);
   const [post, setPost] = useState<IPost>();
+  const [comments, setComments] = useState<IComment[]>();
   const [modalShow, setModalShow] = useState(false);
   const [modalMessage, setModalMessge] = useState('모달창 안내 메시지');
   const [scrap, setScrap] = useState(false);
@@ -133,13 +133,16 @@ const Post = () => {
   const [editCategory, setEditCategory] = useState(post?.category);
   const [editContent, setEditContent] = useState(post?.content);
 
+  const contentArr: any[] = []
+
   // 게시물 불러오기
   useEffect(() => {
-    fetch(`${API_URL}/board/show/${id}`, {
-      method: 'GET',
-    }).then(async (res) => {
-      const jsonRes = await res.json();
-      setPost(jsonRes.board[0]);
+    axios.get(`${API_URL}/board/show/${id}`)
+      .then((res)=>{
+        setPost(res.data.board);
+        setComments(res.data.comment)
+        contentArr[0] = post?.content
+        console.log(contentArr)
     });
   }, []);
 
@@ -246,9 +249,19 @@ const Post = () => {
             <DelBtn onClick={onClickDelBtn}>삭제</DelBtn>
           </PostBtns>
           <ImageContainer>
-            <img src={post?.imageId} alt="" />
+            {
+              post?.imageId !== '' ?(
+              <Img src={post?.imageId} alt="" />) : (
+                <></>
+              )
+            }
           </ImageContainer>
-          <ContentContainer>{post?.content}</ContentContainer>
+          <ContentContainer>{
+              contentArr?.map((arr: any) => {
+                console.log(arr)
+                return arr
+              })
+            }</ContentContainer>
         </PostBox>
       </PostContainer>
       <LikeBtns>
@@ -310,6 +323,8 @@ const Post = () => {
       )}
       <Comments
         id={id}
+        comments={comments}
+        setComments={setComments}
         modalShow={modalShow}
         setModalShow={setModalShow}
         setModalMessge={setModalMessge}
