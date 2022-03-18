@@ -66,10 +66,7 @@ const EditBtn = styled(CategoryName)`
   cursor: pointer;
 `;
 const DelBtn = styled(EditBtn)``;
-const Img=styled.img`
-width:500px;
-height: 500px;
-`
+
 const PostBox = styled.div`
   background: #ffffff;
   border-radius: 12px;
