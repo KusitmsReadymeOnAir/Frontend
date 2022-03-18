@@ -5,6 +5,7 @@ import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId')
 export const Login = () => {
     const [cookies, setCookie]=useCookies();
@@ -13,7 +14,7 @@ export const Login = () => {
             console.log(currentUser);
         }
     const Login=()=>{
-    window.location.href="http://localhost:8080/auth/login"
+    window.location.href=`${API_URL}/auth/login`
    }
    
     return (

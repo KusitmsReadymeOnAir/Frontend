@@ -9,7 +9,10 @@ import Daily from './Categories/Daily';
 import { useCookies } from 'react-cookie';
 import Header from '../Components/Header';
 import { useLocation } from 'react-router-dom';
+import { API_URL } from '../config';
 let prePath="";
+
+
 // 게시글 리스트 페이지
 const Posts = () => {
  

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import Editor from '../Components/Editor';
-const API_URL = 'http://localhost:8080';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId')
 
 export const categories = [

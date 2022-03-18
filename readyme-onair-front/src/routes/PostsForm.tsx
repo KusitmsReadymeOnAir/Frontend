@@ -10,7 +10,9 @@ import {
   BsHeartFill,
   BsChat
 } from 'react-icons/bs';
+import { API_URL } from '../config';
 const currentUser = localStorage.getItem('userId')
+
 
 interface category{
     category:string,
@@ -19,7 +21,7 @@ const PostsForm = (category: category) => {
     const [posts, setPosts]=useState<any[]>([])
     useEffect(()=>{
         console.log(category);
-        axios.get(`http://localhost:8080/board/list/${category.category}`)
+        axios.get(`${API_URL}/board/list/${category.category}`)
         .then((res)=>{console.log(res.data.categoriedData); setPosts(res.data.categoriedData)})
       },[])
     const [modalShow, setModalShow]=useState(false);
