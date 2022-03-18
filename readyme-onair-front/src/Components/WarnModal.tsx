@@ -40,6 +40,10 @@ const WarnModal = (props: IModal) => {
     props.setModalShow(!props.show);
     window.location.href="/login";
   };
+  const toggleOKModal = () => {
+    props.setModalShow(!props.show);
+    
+  };
 
   return (
     <StyledModal
@@ -51,7 +55,13 @@ const WarnModal = (props: IModal) => {
         <h4>{props.message}</h4>
       </MessageContainer>
       <BtnContainer>
+        {props.message==="로그인이 필요합니다."
+        ?
         <CloseBtn onClick={toggleModal}>로그인 하러가기</CloseBtn>
+      :
+      <CloseBtn onClick={toggleOKModal}>확인</CloseBtn>
+      }
+        
       </BtnContainer>
     </StyledModal>
   );
