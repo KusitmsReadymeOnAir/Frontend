@@ -28,7 +28,7 @@ const Header = () => {
             setUser(res.data.userData);});
     }
     
-    },[])
+    },[user])
    
     return (
         <HeaderStyle>
